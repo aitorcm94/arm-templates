@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaces_vm_acmcompute_dev_fr544_name": {
+            "value": null
+        },
+        "virtualMachines_vm_acmcompute_dev_francecentral_001_name": {
+            "value": null
+        },
+        "virtualNetworks_rg_armtemplates_dev_francecentral_vnet_name": {
+            "value": null
+        },
+        "publicIPAddresses_vm_acmcompute_dev_francecentral_001_ip_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vm_acmcompute_dev_francecentral_001_nsg_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_vm_acmcompute_dev_francecentral_001_name": {
+            "value": null
+        }
+    }
+}
