@@ -5,6 +5,18 @@
         "virtualNetworksName": {
             "value": null
         },
+        "location": {
+            "value": null
+        },
+        "addressSpace": {
+            "value": null
+        },
+        "subNetName": {
+            "value": null
+        },
+        "subNetAddressPrefix": {
+            "value": null
+        },
         "tagDisplayName": {
             "value": null
         },
