@@ -26,14 +26,43 @@
       "metadata": {
         "description": "Address space of the subnet to add"
       }
+    },
+    "tagDisplayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Tag for the Display Name"
+      }
+    },
+        "tagEnvironmentType": {
+      "type": "string",
+      "metadata": {
+        "description": "Tag for the Environment Type"
+      }
+    },
+        "tagProjectName": {
+      "type": "string",
+      "metadata": {
+        "description": "Tag for the Project Name"
+      }
+    },
+        "tagBillingIdentifier": {
+      "type": "string",
+      "metadata": {
+        "description": "Tag for the Billing Identifier"
+      }
     }
   },
-  "functions": [],
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks/subnets",
       "apiVersion": "2020-11-01",
       "name": "[format('{0}/{1}', parameters('existingVNETName'), parameters('newSubnetName'))]",
+      "tags": {
+        "DisplayName": "[parameters('tagDisplayName')]",
+        "EnvironmentType": "[parameters('tagEnvironmentType')]",
+        "ProjectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
       "properties": {
         "addressPrefix": "[parameters('newSubnetAddressPrefix')]"
       }
