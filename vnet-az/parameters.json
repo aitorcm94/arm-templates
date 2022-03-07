@@ -4,6 +4,18 @@
     "parameters": {
         "virtualNetworks_vnet_student_westeu_001_name": {
             "value": null
+        },
+        "tagDisplayName": {
+            "value": null
+        },
+        "tagEnvironmentType": {
+           "value": null
+        },
+        "tagProjectName": {
+           "value": null
+        },
+        "tagBillingIdentifier": {
+           "value": null
         }
     }
 }

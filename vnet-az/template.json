@@ -5,6 +5,30 @@
         "virtualNetworks_vnet_student_westeu_001_name": {
             "defaultValue": "vnet-student-westeu-001",
             "type": "String"
+        },
+        "tagDisplayName": {
+          "type": "string",
+          "metadata": {
+            "description": "Tag for the Display Name"
+          }
+        },
+        "tagEnvironmentType": {
+          "type": "string",
+          "metadata": {
+            "description": "Tag for the Environment Type"
+          }
+        },
+        "tagProjectName": {
+          "type": "string",
+          "metadata": {
+            "description": "Tag for the Project Name"
+          }
+        },
+        "tagBillingIdentifier": {
+          "type": "string",
+          "metadata": {
+            "description": "Tag for the Billing Identifier"
+          }
         }
     },
     "variables": {},
@@ -15,7 +39,10 @@
             "name": "[parameters('virtualNetworks_vnet_student_westeu_001_name')]",
             "location": "westeurope",
             "tags": {
-                "displayName": "xxx"
+                "DisplayName": "[parameters('tagDisplayName')]",
+                "EnvironmentType": "[parameters('tagEnvironmentType')]",
+                "ProjectName": "[parameters('tagProjectName')]",
+                "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
             },
             "properties": {
                 "addressSpace": {

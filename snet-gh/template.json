@@ -26,30 +26,6 @@
       "metadata": {
         "description": "Address space of the subnet to add"
       }
-    },
-    "tagDisplayName": {
-      "type": "string",
-      "metadata": {
-        "description": "Tag for the Display Name"
-      }
-    },
-    "tagEnvironmentType": {
-      "type": "string",
-      "metadata": {
-        "description": "Tag for the Environment Type"
-      }
-    },
-    "tagProjectName": {
-      "type": "string",
-      "metadata": {
-        "description": "Tag for the Project Name"
-      }
-    },
-    "tagBillingIdentifier": {
-      "type": "string",
-      "metadata": {
-        "description": "Tag for the Billing Identifier"
-      }
     }
   },
   "resources": [

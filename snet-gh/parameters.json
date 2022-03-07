@@ -10,18 +10,6 @@
     },
     "newSubnetAddressPrefix": {
       "value": null
-    },
-    "tagDisplayName": {
-      "value": null
-    },
-    "tagEnvironmentType": {
-      "value": null
-    },
-    "tagProjectName": {
-      "value": null
-    },
-    "tagBillingIdentifier": {
-      "value": null
     }
   }
 }
