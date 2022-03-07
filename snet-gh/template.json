@@ -33,19 +33,19 @@
         "description": "Tag for the Display Name"
       }
     },
-        "tagEnvironmentType": {
+    "tagEnvironmentType": {
       "type": "string",
       "metadata": {
         "description": "Tag for the Environment Type"
       }
     },
-        "tagProjectName": {
+    "tagProjectName": {
       "type": "string",
       "metadata": {
         "description": "Tag for the Project Name"
       }
     },
-        "tagBillingIdentifier": {
+    "tagBillingIdentifier": {
       "type": "string",
       "metadata": {
         "description": "Tag for the Billing Identifier"
