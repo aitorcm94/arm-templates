@@ -6,7 +6,7 @@
             "value": null
         },
         "location": {
-            "value": null
+            "value": "[resourceGroup().location]"
         },
         "addressSpace": {
             "value": null
