@@ -9,19 +9,21 @@
             "value": "[resourceGroup().location]"
         },
         "securityRules": {
-            "value": []
-        },
-        "enableDeleteLock": {
-            "value": false
-        },
-        "enableDiagnostics": {
-            "value": false
-        },
-        "diagnosticStorageAccountId": {
-            "value": null
-        },
-        "logAnalyticsWorkspaceId": {
-            "value": null
+            "value": [
+                {
+                "name": "HTTP",
+                "properties": {
+                  "priority": 300,
+                  "protocol": "TCP",
+                  "access": "Allow",
+                  "direction": "Inbound",
+                  "sourceAddressPrefix": "*",
+                  "sourcePortRange": "*",
+                  "destinationAddressPrefix": "*",
+                  "destinationPortRange": "80"
+                }
+              }
+            ]
         }
     }
 }

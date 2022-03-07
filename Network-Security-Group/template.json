@@ -25,44 +25,25 @@
       },
       "securityRules": {
         "type": "array",
-        "defaultValue": [],
+        "defaultValue": [
+          {
+            "name": "HTTP",
+            "properties": {
+              "priority": 300,
+              "protocol": "TCP",
+              "access": "Allow",
+              "direction": "Inbound",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "80"
+            }
+          }
+        ],
         "metadata": {
           "description": "Array containing security rules. For properties format refer to https://docs.microsoft.com/en-us/azure/templates/microsoft.network/networksecuritygroups?tabs=bicep#securityrulepropertiesformat"
         }
-      },
-      "enableDeleteLock": {
-        "type": "bool",
-        "defaultValue": false,
-        "metadata": {
-          "description": "Enable delete lock"
-        }
-      },
-      "enableDiagnostics": {
-        "type": "bool",
-        "defaultValue": false,
-        "metadata": {
-          "description": "Enable diagnostic logs"
-        }
-      },
-      "diagnosticStorageAccountId": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "Storage account resource id. Only required if enableDiagnostics is set to true."
-        }
-      },
-      "logAnalyticsWorkspaceId": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "Log analytics workspace resource id. Only required if enableDiagnostics is set to true."
-        }
       }
-    },
-    "functions": [],
-    "variables": {
-      "lockName": "[format('{0}-lck', parameters('nsgName'))]",
-      "diagnosticsName": "[format('{0}-dgs', parameters('nsgName'))]"
     },
     "resources": [
       {
@@ -82,53 +63,6 @@
             }
           ]
         }
-      },
-      {
-        "condition": "[parameters('enableDiagnostics')]",
-        "type": "Microsoft.Insights/diagnosticSettings",
-        "apiVersion": "2021-05-01-preview",
-        "scope": "[format('Microsoft.Network/networkSecurityGroups/{0}', parameters('nsgName'))]",
-        "name": "[variables('diagnosticsName')]",
-        "properties": {
-          "workspaceId": "[if(empty(parameters('logAnalyticsWorkspaceId')), null(), parameters('logAnalyticsWorkspaceId'))]",
-          "storageAccountId": "[if(empty(parameters('diagnosticStorageAccountId')), null(), parameters('diagnosticStorageAccountId'))]",
-          "logs": [
-            {
-              "category": "NetworkSecurityGroupEvent",
-              "enabled": true
-            },
-            {
-              "category": "NetworkSecurityGroupRuleCounter",
-              "enabled": true
-            }
-          ]
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-        ]
-      },
-      {
-        "condition": "[parameters('enableDeleteLock')]",
-        "type": "Microsoft.Authorization/locks",
-        "apiVersion": "2017-04-01",
-        "scope": "[format('Microsoft.Network/networkSecurityGroups/{0}', parameters('nsgName'))]",
-        "name": "[variables('lockName')]",
-        "properties": {
-          "level": "CanNotDelete"
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-        ]
       }
-    ],
-    "outputs": {
-      "name": {
-        "type": "string",
-        "value": "[parameters('nsgName')]"
-      },
-      "id": {
-        "type": "string",
-        "value": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-      }
-    }
+    ]
   }
