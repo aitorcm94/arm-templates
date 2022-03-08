@@ -127,6 +127,34 @@
       "metadata": {
         "description": "Tipo de licencia que quieres usar. Opcional..."
       }
+    },
+    "tagDisplayName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Tag for the Display Name."
+      }
+    },
+    "tagEnvironmentType": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Tag for the Environment Type."
+      }
+    },
+    "tagProjectName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Tag for the Project Name."
+      }
+    },
+    "tagBillingIdentifier": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Tag for the Billing Identifier."
+      }
     }
   },
   "variables": {
@@ -169,6 +197,12 @@
       "apiVersion": "2020-11-01",
       "name": "[variables('publicIPAddressName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "DisplayName": "[parameters('tagDisplayName')]",
+        "EnvironmentType": "[parameters('tagEnvironmentType')]",
+        "ProjectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
       "sku": {
         "name": "standard"
       },
@@ -184,6 +218,12 @@
       "name": "[variables('niName')]",
       "apiVersion": "2020-11-01",
       "location": "[parameters('location')]",
+      "tags": {
+        "DisplayName": "[parameters('tagDisplayName')]",
+        "EnvironmentType": "[parameters('tagEnvironmentType')]",
+        "ProjectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
       "properties": {
         "ipConfigurations": [
           {
@@ -214,6 +254,12 @@
       "apiVersion": "2021-04-01",
       "name": "[variables('vmName')]",
       "location": "[parameters('location')]",
+      "tags": {
+        "DisplayName": "[parameters('tagDisplayName')]",
+        "EnvironmentType": "[parameters('tagEnvironmentType')]",
+        "ProjectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/', variables('niName'))]"
       ],
