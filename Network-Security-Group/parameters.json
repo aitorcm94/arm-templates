@@ -2,28 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "nsgName": {
-            "value": null
-        },
-        "location": {
-            "value": "[resourceGroup().location]"
-        },
-        "securityRules": {
-            "value": [
-                {
-                "name": "HTTP",
-                "properties": {
-                  "priority": 300,
-                  "protocol": "TCP",
-                  "access": "Allow",
-                  "direction": "Inbound",
-                  "sourceAddressPrefix": "*",
-                  "sourcePortRange": "*",
-                  "destinationAddressPrefix": "*",
-                  "destinationPortRange": "80"
-                }
-              }
-            ]
-        }
+        
     }
 }

@@ -2,29 +2,32 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "virtualMachineName": {
-        "value": null
-      },
-      "location": {
-        "value": "[resourceGroup().location]"
+      "vmName": {
+        "value": "vm-demo-01"
       },
       "adminUsername": {
-        "value": null
+        "value": "Administrador"
       },
       "adminPassword": {
-        "value": null
+        "value": "Administrador1"
       },
-      "vmSize": {
-        "value": "Standard_D2s_v3"
+      "virtualNetworkName": {
+        "value": "vnet-student-westeu-001"
       },
-      "existingNetworkSecurityGroupName": {
-        "value": null
+      "virtualNetworkNewOrExisting": {
+        "value": "existing"
       },
-      "publicIPAddressName": {
-        "value": null
+      "virtualNetworkAddressPrefix": {
+        "value": "10.0.0.0/16"
       },
-      "networkInterfaceName": {
-        "value": null
+      "virtualNetworkResourceGroup": {
+        "value": "rg-armtemplate-student-002"
+      },
+      "subnetName": {
+        "value": "default"
+      },
+      "subnetAddressPrefix": {
+        "value": "10.0.0.0/24"
       }
     }
   }
