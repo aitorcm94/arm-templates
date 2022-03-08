@@ -4,14 +4,14 @@
     "parameters": {
       "nsgName": {
         "type": "string",
-        "defaultValue": "[uniqueString(resourceGroup().id)]",
+        "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
         "metadata": {
           "description": "Network security group name"
         }
       },
       "location": {
         "type": "string",
-        "defaultValue": "[concat('nsg-', resourceGroup().location)]",
+        "defaultValue": "[resourceGroup().location]",
         "metadata": {
           "description": "Network security group location"
         }
