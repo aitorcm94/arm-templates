@@ -85,6 +85,12 @@
       "metadata": {
         "description": "Subnet address prefix."
       }
+    },
+    "existingNSGname": {
+      "type": "string",
+      "metadata": {
+        "description": "Add an existing NSG name."
+      }
     }
   },
   "variables": {
@@ -96,7 +102,8 @@
       "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
     },
     "subnetId": "[concat(variables('vnetId')[parameters('virtualNetworkNewOrExisting')],'/subnets/',parameters('subnetName'))]",
-    "publicIPAddressType": "Dynamic"
+    "publicIPAddressType": "Dynamic",
+    "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGname'))]"
   },
   "resources": [
         {
@@ -150,7 +157,10 @@
             }
           }
         ],
-        "enableIPForwarding": true
+        "enableIPForwarding": true,
+        "networkSecurityGroup": {
+          "id": "[variables('nsgId')]"
+        }
       },
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",

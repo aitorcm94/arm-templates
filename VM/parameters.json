@@ -28,6 +28,9 @@
       },
       "subnetAddressPrefix": {
         "value": "10.0.0.0/24"
+      },
+      "existingNSGname": {
+        "value": "demo"
       }
     }
   }
