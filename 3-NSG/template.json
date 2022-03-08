@@ -36,7 +36,35 @@
         "metadata": {
           "description": "Array containing security rules."
         }
-      }
+      },
+        "tagDisplayName": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Tag for the Display Name."
+          }
+        },
+        "tagEnvironmentType": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Tag for the Environment Type."
+          }
+        },
+        "tagProjectName": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Tag for the Project Name."
+          }
+        },
+        "tagBillingIdentifier": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+            "description": "Tag for the Billing Identifier."
+          }
+        }
     },
     "resources": [
       {
@@ -44,6 +72,12 @@
         "apiVersion": "2020-11-01",
         "name": "[parameters('nsgName')]",
         "location": "[parameters('location')]",
+        "tags": {
+            "DisplayName": "[parameters('tagDisplayName')]",
+            "EnvironmentType": "[parameters('tagEnvironmentType')]",
+            "ProjectName": "[parameters('tagProjectName')]",
+            "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+        },
         "properties": {
           "securityRules": "[parameters('securityRules')]"
         }
