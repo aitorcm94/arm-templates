@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "existingVNETName": {
-      "value": null
+      "value": "vnet-temp-we"
     },
     "newSubnetName": {
-      "value": null
+      "value": "subnet02"
     },
     "newSubnetAddressPrefix": {
-      "value": null
+      "value": "10.0.1.0/24"
     }
   }
 }
