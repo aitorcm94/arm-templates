@@ -31,9 +31,6 @@
       },
       "existingNSGName": {
         "value": "demo"
-      },
-      "osDiskType": {
-        "value": "Premium_LRS"
       }
     }
   }
