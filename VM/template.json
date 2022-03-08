@@ -4,6 +4,7 @@
   "parameters": {
     "vmName": {
       "type": "string",
+      "maxLength": 15,
       "metadata": {
         "description": "Specifies the name of the VM."
       }
