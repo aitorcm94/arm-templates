@@ -91,12 +91,36 @@
       "metadata": {
         "description": "Add an existing NSG name."
       }
+    },
+    "osDiskType": {
+      "type": "string",
+      "metadata": {
+        "description": "Premium_LRS..."
+      }
+    },
+    "osDiskDeleteOption": {
+      "type": "string",
+      "metadata": {
+        "description": "Delete if you whant to delete the disck with the VM. Detach if you don't."
+      }
+    },
+    "niDeleteOption": {
+      "type": "string",
+      "metadata": {
+        "description": "Delete if you whant to delete the Network Interface with the VM. Detach if you don't."
+      }
+    },
+    "license": {
+      "type": "string",
+      "metadata": {
+        "description": "Tipo de licencia que quieres usar. Opcional..."
+      }
     }
   },
   "variables": {
     "publicIPAddressName": "[concat(uniqueString(resourceGroup().id),'IP')]",
     "vmName": "[parameters('vmName')]",
-    "nicName": "[concat(parameters('vmName'),'Nic')]",
+    "niName": "[concat('ni-', parameters('vmName'))]",
     "vnetId": {
       "new": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
       "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
@@ -133,13 +157,19 @@
       "apiVersion": "2020-11-01",
       "name": "[variables('publicIPAddressName')]",
       "location": "[parameters('location')]",
+      "sku": {
+        "name": "standard"
+      },
+      "zones": [
+        "1"
+      ],
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
       }
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[variables('niName')]",
       "apiVersion": "2020-11-01",
       "location": "[parameters('location')]",
       "properties": {
@@ -173,41 +203,53 @@
       "name": "[variables('vmName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces/', variables('niName'))]"
+      ],
+      "zones": [
+        "1"
       ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
-        "osProfile": {
-          "computerName": "[variables('vmName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
         "storageProfile": {
+          "osDisk": {
+            "createOption": "FromImage",
+            "managedDisk": {
+              "storageAccountType": "[parameters('osDiskType')]"
+            },
+            "deleteOption": "[parameters('osDiskDeleteOption')]"
+          },
           "imageReference": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
             "sku": "[parameters('windowsOSVersion')]",
             "version": "latest"
           },
-          "osDisk": {
-            "createOption": "FromImage"
+          "networkProfile": {
+            "networkInterfaces": [
+              {
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('niName'))]",
+                "properties": {
+                  "deleteOption": "[parameters('niDeleteOption')]"
+                }
+              }
+            ]
           },
-          "dataDisks": [
-            {
-              "diskSizeGB": 1023,
-              "lun": 0,
-              "createOption": "Empty"
+          "osProfile": {
+            "computerName": "[variables('vmName')]",
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]",
+            "windowsConfiguration": {
+              "enableAutomaticUpdates": true,
+              "provisionVmAgent": true,
+              "patchSettings": {
+                "enableHotpatching": false,
+                "patchMode": "AutomaticByOS"
+              }
             }
-          ]
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
-            }
-          ]
+          },
+          "licenseType": "[parameters('license')]"
         }
       }
     }

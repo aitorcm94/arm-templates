@@ -3,31 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualNetworksName": {
-            "value": null
-        },
-        "location": {
-            "value": "[resourceGroup().location]"
-        },
-        "addressSpace": {
-            "value": null
+            "value": "vnet-demo-01"
         },
         "subNetName": {
-            "value": null
-        },
-        "subNetAddressPrefix": {
-            "value": null
+            "value": "subnet01"
         },
         "tagDisplayName": {
-            "value": null
+            "value": "tag1"
         },
         "tagEnvironmentType": {
-           "value": null
+           "value": "tag2"
         },
         "tagProjectName": {
-           "value": null
+           "value": "tag3"
         },
         "tagBillingIdentifier": {
-           "value": null
+           "value": "tag4"
         }
     }
 }

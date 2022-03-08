@@ -31,6 +31,18 @@
       },
       "existingNSGname": {
         "value": "demo"
+      },
+      "osDiskType": {
+        "value": "Premium_LRS"
+      },
+      "osDiskDeleteOption": {
+        "value": "Delete"
+      },
+      "niDeleteOption": {
+        "value": "Detach"
+      },
+      "license": {
+        "value": "Windows_Server"
       }
     }
   }
