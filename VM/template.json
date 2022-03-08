@@ -215,7 +215,26 @@
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "windowsConfiguration": {
+            "enableAutomaticUpdates": true,
+            "provisionVmAgent": true,
+            "patchSettings": {
+              "enableHotpatching": false,
+              "patchMode": "AutomaticByOS"
+            }
+          }
+        },
         "storageProfile": {
+            "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "[parameters('windowsOSVersion')]",
+            "version": "latest"
+          },
           "osDisk": {
             "createOption": "FromImage",
             "managedDisk": {
@@ -223,37 +242,25 @@
             },
             "deleteOption": "[parameters('osDiskDeleteOption')]"
           },
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "[parameters('windowsOSVersion')]",
-            "version": "latest"
-          },
-          "networkProfile": {
-            "networkInterfaces": [
-              {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('niName'))]",
-                "properties": {
-                  "deleteOption": "[parameters('NIDeleteOption')]"
-                }
-              }
-            ]
-          },
-          "osProfile": {
-            "computerName": "[variables('vmName')]",
-            "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]",
-            "windowsConfiguration": {
-              "enableAutomaticUpdates": true,
-              "provisionVmAgent": true,
-              "patchSettings": {
-                "enableHotpatching": false,
-                "patchMode": "AutomaticByOS"
+          "dataDisks": [
+            {
+              "diskSizeGB": 1023,
+              "lun": 0,
+              "createOption": "Empty"
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('niName'))]",
+              "properties": {
+                "deleteOption": "[parameters('NIDeleteOption')]"
               }
             }
-          },
-          "licenseType": "[parameters('license')]"
-        }
+          ]
+        },
+        "licenseType": "[parameters('license')]"
       }
     }
   ]
