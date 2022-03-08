@@ -29,20 +29,11 @@
       "subnetAddressPrefix": {
         "value": "10.0.0.0/24"
       },
-      "existingNSGname": {
+      "existingNSGName": {
         "value": "demo"
       },
       "osDiskType": {
         "value": "Premium_LRS"
-      },
-      "osDiskDeleteOption": {
-        "value": "Delete"
-      },
-      "niDeleteOption": {
-        "value": "Detach"
-      },
-      "license": {
-        "value": "Windows_Server"
       }
     }
   }

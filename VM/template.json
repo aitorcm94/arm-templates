@@ -86,7 +86,7 @@
         "description": "Subnet address prefix."
       }
     },
-    "existingNSGname": {
+    "existingNSGName": {
       "type": "string",
       "metadata": {
         "description": "Add an existing NSG name."
@@ -100,18 +100,21 @@
     },
     "osDiskDeleteOption": {
       "type": "string",
+      "defaultValue": "Delete",
       "metadata": {
         "description": "Delete if you whant to delete the disck with the VM. Detach if you don't."
       }
     },
-    "niDeleteOption": {
+    "NIDeleteOption": {
       "type": "string",
+      "defaultValue": "Detach",
       "metadata": {
         "description": "Delete if you whant to delete the Network Interface with the VM. Detach if you don't."
       }
     },
     "license": {
       "type": "string",
+      "defaultValue": "Windows_Server",
       "metadata": {
         "description": "Tipo de licencia que quieres usar. Opcional..."
       }
@@ -126,8 +129,8 @@
       "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
     },
     "subnetId": "[concat(variables('vnetId')[parameters('virtualNetworkNewOrExisting')],'/subnets/',parameters('subnetName'))]",
-    "publicIPAddressType": "Dynamic",
-    "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGname'))]"
+    "publicIPAddressType": "Static",
+    "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
   },
   "resources": [
         {
@@ -231,7 +234,7 @@
               {
                 "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('niName'))]",
                 "properties": {
-                  "deleteOption": "[parameters('niDeleteOption')]"
+                  "deleteOption": "[parameters('NIDeleteOption')]"
                 }
               }
             ]
