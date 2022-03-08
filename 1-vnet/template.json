@@ -14,7 +14,8 @@
             "defaultValue": "10.0.0.0/16"
         },
         "subNetName": {
-            "type": "String"
+            "type": "String",
+            "defaultValue": "subnet01"
         },
         "subNetAddressPrefix": {
             "type": "String",
@@ -22,26 +23,30 @@
         },
         "tagDisplayName": {
           "type": "string",
+          "defaultValue": "",
           "metadata": {
-            "description": "Tag for the Display Name"
+            "description": "Tag for the Display Name."
           }
         },
         "tagEnvironmentType": {
           "type": "string",
+          "defaultValue": "",
           "metadata": {
-            "description": "Tag for the Environment Type"
+            "description": "Tag for the Environment Type."
           }
         },
         "tagProjectName": {
           "type": "string",
+          "defaultValue": "",
           "metadata": {
-            "description": "Tag for the Project Name"
+            "description": "Tag for the Project Name."
           }
         },
         "tagBillingIdentifier": {
           "type": "string",
+          "defaultValue": "",
           "metadata": {
-            "description": "Tag for the Billing Identifier"
+            "description": "Tag for the Billing Identifier."
           }
         }
     },
