@@ -4,16 +4,16 @@
     "parameters": {
       "nsgName": {
         "type": "string",
-        "defaultValue": "[concat('nsg-', uniqueString(resourceGroup().id))]",
+        "defaultValue": "sogeti-nsg-tcc-brandreputation-d",
         "metadata": {
-          "description": "Network security group name"
+          "description": "Network security group name."
         }
       },
       "location": {
         "type": "string",
         "defaultValue": "[resourceGroup().location]",
         "metadata": {
-          "description": "Network security group location"
+          "description": "Network security group location."
         }
       },
       "securityRules": {
@@ -39,28 +39,28 @@
       },
         "tagDisplayName": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "NSG",
           "metadata": {
             "description": "Tag for the Display Name."
           }
         },
         "tagEnvironmentType": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "DEV",
           "metadata": {
             "description": "Tag for the Environment Type."
           }
         },
         "tagProjectName": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "Brand Reputation Prototype",
           "metadata": {
             "description": "Tag for the Project Name."
           }
         },
         "tagBillingIdentifier": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "SogetiLab",
           "metadata": {
             "description": "Tag for the Billing Identifier."
           }
