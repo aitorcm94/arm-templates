@@ -3,7 +3,8 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "virtualNetworksName": {
-            "type": "String"
+            "type": "String",
+            "defaultValue": "sogeti-vnet-brandreputation-d"
         },
         "location": {
             "type": "String",
@@ -15,7 +16,7 @@
         },
         "subNetName": {
             "type": "String",
-            "defaultValue": "subnet01"
+            "defaultValue": "default"
         },
         "subNetAddressPrefix": {
             "type": "String",
@@ -23,28 +24,28 @@
         },
         "tagDisplayName": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "VNET",
           "metadata": {
             "description": "Tag for the Display Name."
           }
         },
         "tagEnvironmentType": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "DEV",
           "metadata": {
             "description": "Tag for the Environment Type."
           }
         },
         "tagProjectName": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "Brand Reputation Prototype",
           "metadata": {
             "description": "Tag for the Project Name."
           }
         },
         "tagBillingIdentifier": {
           "type": "string",
-          "defaultValue": "",
+          "defaultValue": "SogetiLab",
           "metadata": {
             "description": "Tag for the Billing Identifier."
           }
