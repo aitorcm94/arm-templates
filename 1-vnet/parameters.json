@@ -4,6 +4,9 @@
     "parameters": {
         "virtualNetworksName": {
             "value": "vnet-demo-01"
+        },
+        "addressSpace": {
+            "value": "10.0.0.0/16"
         }
     }
 }

@@ -20,12 +20,6 @@
       "type": "string",
       "defaultValue": "2019-Datacenter",
       "allowedValues": [
-        "2008-R2-SP1",
-        "2012-Datacenter",
-        "2012-R2-Datacenter",
-        "2016-Nano-Server",
-        "2016-Datacenter-with-Containers",
-        "2016-Datacenter",
         "2019-Datacenter"
       ],
       "metadata": {
@@ -103,8 +97,15 @@
     "osDiskType": {
       "type": "string",
       "defaultValue": "Premium_LRS",
+      "allowedValues": [
+        "Premium_LRS",
+        "StandardSSD_LRS",
+        "StandardHDD_LRS",
+        "Premium_ZRS",
+        "Standard_ZRS"
+      ],
       "metadata": {
-        "description": "OS Disk type: Premium_LRS, StandardSSD_LRS, StandardHDD_LRS, Premium_ZRS, Standard_ZRS"
+        "description": "OS Disk type"
       }
     },
     "osDiskDeleteOption": {
@@ -114,18 +115,11 @@
         "description": "Delete if you whant to delete the disck with the VM. Detach if you don't."
       }
     },
-    "NIDeleteOption": {
+    "NICDeleteOption": {
       "type": "string",
       "defaultValue": "Detach",
       "metadata": {
         "description": "Delete if you whant to delete the Network Interface with the VM. Detach if you don't."
-      }
-    },
-    "license": {
-      "type": "string",
-      "defaultValue": "Windows_Server",
-      "metadata": {
-        "description": "Tipo de licencia que quieres usar. Opcional..."
       }
     },
     "tagDisplayName": {
@@ -160,7 +154,7 @@
   "variables": {
     "publicIPAddressName": "[concat('ip-', uniqueString(resourceGroup().id))]",
     "vmName": "[parameters('vmName')]",
-    "niName": "[concat('ni-', parameters('vmName'))]",
+    "nicName": "[concat('nic-', parameters('vmName'))]",
     "vnetId": {
       "new": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
       "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
@@ -215,7 +209,7 @@
     },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('niName')]",
+      "name": "[variables('nicName')]",
       "apiVersion": "2020-11-01",
       "location": "[parameters('location')]",
       "tags": {
@@ -261,7 +255,7 @@
         "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('niName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
       "zones": [
         "1"
@@ -302,14 +296,13 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('niName'))]",
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
               "properties": {
-                "deleteOption": "[parameters('NIDeleteOption')]"
+                "deleteOption": "[parameters('NICDeleteOption')]"
               }
             }
           ]
-        },
-        "licenseType": "[parameters('license')]"
+        }
       }
     }
   ]

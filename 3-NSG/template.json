@@ -20,7 +20,7 @@
         "type": "array",
         "defaultValue": [
           {
-            "name": "HTTP",
+            "name": "RDP",
             "properties": {
               "priority": 300,
               "protocol": "TCP",
@@ -29,7 +29,7 @@
               "sourceAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "80"
+              "destinationPortRange": "3389"
             }
           }
         ],

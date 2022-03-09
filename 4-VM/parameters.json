@@ -6,10 +6,20 @@
         "value": "vm-demo-01"
       },
       "adminUsername": {
-        "value": "Administrador"
+        "reference":{
+          "keyVault": {
+          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
+          },
+          "secretName": "vm-tcc-username"
+        }
       },
       "adminPassword": {
-        "value": "Administrador1"
+        "reference":{
+          "keyVault": {
+          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
+          },
+          "secretName": "vm-tcc-password"
+        }
       },
       "virtualNetworkName": {
         "value": "vnet-student-westeu-001"
