@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "existingVNETName": {
-      "value": "vnet-temp-we"
+      "value": "sogeti-vnet-brandreputation-d"
     },
     "newSubnetName": {
       "value": "subnet02"

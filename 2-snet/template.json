@@ -4,6 +4,7 @@
   "parameters": {
     "existingVNETName": {
       "type": "string",
+      "defaultValue": "sogeti-vnet-brandreputation-d",
       "metadata": {
         "description": "Name of the VNET to add a subnet to"
       }
