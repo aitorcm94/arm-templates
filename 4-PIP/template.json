@@ -4,14 +4,38 @@
     "parameters": {
         "publicIPAddressesName": {
             "type": "String",
-            "defaultValue": "sogeti-pip-tcc-brandreputation-d-we"
+            "defaultValue": "sogeti-pip-tcc-brandreputation-d-we",
+            "metadata": {
+                "description": "Name of the Public IP."
+            }
         },
         "location": {
-          "type": "string",
-          "defaultValue": "[resourceGroup().location]",
-          "metadata": {
-            "description": "Specifies the location of the PIP."
-          }
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specifies the location of the PIP."
+            }
+        },
+        "IPAddress": {
+            "type": "string",
+            "defaultValue": "104.45.27.160",
+            "metadata": {
+                "description": "Adress of the new public IP."
+            }
+        },
+        "publicIPAddressVersion": {
+            "type": "string",
+            "defaultValue": "IPv4",
+            "metadata": {
+                "description": "Version of the new public IP."
+            }
+        },
+        "publicIPAllocationMethod": {
+            "type": "string",
+            "defaultValue": "Static",
+            "metadata": {
+                "description": "Static or Dynamic."
+            }
         },
         "tagDisplayName": {
             "type": "string",
@@ -55,16 +79,13 @@
                 "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
             },
             "sku": {
-                "name": "Standard",
+                "name": "Basic",
                 "tier": "Regional"
             },
-            "zones": [
-                "1"
-            ],
             "properties": {
-                "ipAddress": "20.224.9.231",
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "Static",
+                "ipAddress": "[parameters('IPAddress')]",
+                "publicIPAddressVersion": "[parameters('publicIPAddressVersion')]",
+                "publicIPAllocationMethod": "[parameters('publicIPAllocationMethod')]",
                 "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
