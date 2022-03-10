@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "publicIPAddressesName": {
+            "type": "String",
+            "defaultValue": "sogeti-pip-tcc-brandreputation-d-we"
+        },
+        "location": {
+          "type": "string",
+          "defaultValue": "[resourceGroup().location]",
+          "metadata": {
+            "description": "Specifies the location of the PIP."
+          }
+        },
+        "tagDisplayName": {
+            "type": "string",
+            "defaultValue": "PIP",
+            "metadata": {
+                "description": "Tag for the Display Name."
+            }
+        },
+        "tagEnvironmentType": {
+            "type": "string",
+            "defaultValue": "DEV",
+            "metadata": {
+                "description": "Tag for the Environment Type."
+            }
+        },
+        "tagProjectName": {
+            "type": "string",
+            "defaultValue": "Brand Reputation Prototype",
+            "metadata": {
+                "description": "Tag for the Project Name."
+            }
+        },
+        "tagBillingIdentifier": {
+            "type": "string",
+            "defaultValue": "SogetiLab",
+            "metadata": {
+                "description": "Tag for the Billing Identifier."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('publicIPAddressesName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "DisplayName": "[parameters('tagDisplayName')]",
+                "EnvironmentType": "[parameters('tagEnvironmentType')]",
+                "ProjectName": "[parameters('tagProjectName')]",
+                "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+            },
+            "sku": {
+                "name": "Standard",
+                "tier": "Regional"
+            },
+            "zones": [
+                "1"
+            ],
+            "properties": {
+                "ipAddress": "20.224.9.231",
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": []
+            }
+        }
+    ]
+}

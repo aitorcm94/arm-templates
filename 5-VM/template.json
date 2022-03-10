@@ -2,11 +2,19 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vmName": {
+    "virtualMachineName": {
       "type": "string",
+      "defaultValue": "sogeti-vm-tcc-brandreputation-d",
+      "metadata": {
+        "description": "Specifies the VM resource name."
+      }
+    },
+    "virtualMachineComputerName": {
+      "type": "string",
+      "defaultValue": "sogeti-vm-tcc-b",
       "maxLength": 15,
       "metadata": {
-        "description": "Specifies the name of the VM."
+        "description": "Specifies the VM host name."
       }
     },
     "location": {
@@ -89,7 +97,7 @@
     },
     "osDiskName": {
       "type": "string",
-      "defaultValue": "[concat('disck-', parameters('vmName'))]",
+      "defaultValue": "sogeti-datadisk-tcc-OsDisk-1",
       "metadata": {
         "description": "Name of the VM disk."
       }
@@ -124,43 +132,44 @@
     },
     "tagDisplayName": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "PIP",
       "metadata": {
         "description": "Tag for the Display Name."
       }
     },
     "tagEnvironmentType": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "DEV",
       "metadata": {
         "description": "Tag for the Environment Type."
       }
     },
     "tagProjectName": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "Brand Reputation Prototype",
       "metadata": {
         "description": "Tag for the Project Name."
       }
     },
     "tagBillingIdentifier": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "SogetiLab",
       "metadata": {
         "description": "Tag for the Billing Identifier."
       }
     }
   },
   "variables": {
-    "publicIPAddressName": "[concat('ip-', uniqueString(resourceGroup().id))]",
-    "vmName": "[parameters('vmName')]",
+    "publicIPAddressName": "sogeti-pip-tcc-brandreputation-d-we",
+    "publicIPAddressType": "Static",
+
     "nicName": "[concat('nic-', parameters('vmName'))]",
+    
     "vnetId": {
       "new": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
       "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
     },
     "subnetId": "[concat(variables('vnetId')[parameters('virtualNetworkNewOrExisting')],'/subnets/',parameters('subnetName'))]",
-    "publicIPAddressType": "Static",
     "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
   },
   "resources": [
