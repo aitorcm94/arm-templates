@@ -24,26 +24,20 @@
           "secretName": "vm-tcc-password"
         }
       },
-      "virtualNetworkName": {
-        "value": "vnet-student-westeu-001"
-      },
-      "virtualNetworkNewOrExisting": {
-        "value": "existing"
-      },
-      "virtualNetworkAddressPrefix": {
-        "value": "10.0.0.0/16"
+      "existingVirtualNetworkName": {
+        "value": "sogeti-vnet-brandreputation-d"
       },
       "virtualNetworkResourceGroup": {
-        "value": "rg-armtemplate-student-002"
+        "value": "sogeti-platform-brandreputation-d"
       },
-      "subnetName": {
+      "existingSubnetName": {
         "value": "default"
       },
-      "subnetAddressPrefix": {
-        "value": "10.0.0.0/24"
-      },
       "existingNSGName": {
-        "value": "demo"
+        "value": "sogeti-nsg-tcc-brandreputation-d"
+      },
+      "NICName": {
+        "value": "sogeti-nic-tcc-brandreputation-d"
       }
     }
   }

@@ -36,7 +36,7 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_B1s",
+      "defaultValue": "Standard_B2s",
       "metadata": {
         "description": "Size of the VM."
       }
@@ -53,44 +53,30 @@
           "description": "Specifies a password for the Virtual Machine."
       }
     },
-    "virtualNetworkName": {
+    "existingVirtualNetworkName": {
       "type": "string",
+      "defaultValue": "sogeti-vnet-brandreputation-d",
       "metadata": {
-        "description": "New or Existing VNet Name."
-      }
-    },
-    "virtualNetworkNewOrExisting": {
-      "type": "string",
-      "metadata": {
-        "description": "If the value is set to new creates a vnet."
-      }
-    },
-    "virtualNetworkAddressPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "VNet address prefix."
+        "description": "Name of the existing Virtual Network."
       }
     },
     "virtualNetworkResourceGroup": {
       "type": "string",
+      "defaultValue": "sogeti-platform-brandreputation-d",
       "metadata": {
         "description": "Resource group of the VNet."
       }
     },
-    "subnetName": {
+    "existingSubnetName": {
       "type": "string",
+      "defaultValue": "default",
       "metadata": {
-        "description": "New or Existing subnet Name."
-      }
-    },
-    "subnetAddressPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Subnet address prefix."
+        "description": "Existing subnet Name."
       }
     },
     "existingNSGName": {
       "type": "string",
+      "defaultValue": "sogeti-nsg-tcc-brandreputation-d",
       "metadata": {
         "description": "Add an existing NSG name."
       }
@@ -104,7 +90,7 @@
     },
     "osDiskType": {
       "type": "string",
-      "defaultValue": "Premium_LRS",
+      "defaultValue": "StandardSSD_LRS",
       "allowedValues": [
         "Premium_LRS",
         "StandardSSD_LRS",
@@ -119,15 +105,37 @@
     "osDiskDeleteOption": {
       "type": "string",
       "defaultValue": "Delete",
+      "allowedValues": [
+        "Detach",
+        "Delete"
+      ],
       "metadata": {
-        "description": "Delete if you whant to delete the disck with the VM. Detach if you don't."
+        "description": "Delete the Disk with the VM or Detach it."
+      }
+    },
+    "NICName": {
+      "type": "string",
+      "defaultValue": "sogeti-nic-tcc-brandreputation-d",
+      "metadata": {
+        "description": "Name of the Network Interface."
       }
     },
     "NICDeleteOption": {
       "type": "string",
       "defaultValue": "Detach",
+      "allowedValues": [
+        "Detach",
+        "Delete"
+      ],
       "metadata": {
-        "description": "Delete if you whant to delete the Network Interface with the VM. Detach if you don't."
+        "description": "Delete the Network Interface with the VM or Detach it."
+      }
+    },
+    "existingPIPName": {
+      "type": "string",
+      "defaultValue": "sogeti-pip-tcc-brandreputation-d-we",
+      "metadata": {
+        "description": "Name of the existing Public IP."
       }
     },
     "tagDisplayName": {
@@ -159,66 +167,15 @@
       }
     }
   },
-  "variables": {
-    "publicIPAddressName": "sogeti-pip-tcc-brandreputation-d-we",
-    "publicIPAddressType": "Static",
-
-    "nicName": "[concat('nic-', parameters('vmName'))]",
-    
-    "vnetId": {
-      "new": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
-      "existing": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]"
-    },
-    "subnetId": "[concat(variables('vnetId')[parameters('virtualNetworkNewOrExisting')],'/subnets/',parameters('subnetName'))]",
+  "variables": {    
+    "vnetId": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('existingVirtualNetworkName'))]",
+    "subnetId": "[concat(variables('vnetId'),'/subnets/',parameters('existingSubnetName'))]",
     "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
   },
   "resources": [
-        {
-      "condition": "[equals(parameters('virtualNetworkNewOrExisting'),'new')]",
-      "type": "Microsoft.Network/virtualNetworks",
-      "apiVersion": "2020-11-01",
-      "name": "[parameters('virtualNetworkName')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('virtualNetworkAddressPrefix')]"
-          ]
-        },
-        "subnets": [
-          {
-            "name": "[parameters('subnetName')]",
-            "properties": {
-              "addressPrefix": "[parameters('subnetAddressPrefix')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2020-11-01",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[parameters('location')]",
-      "tags": {
-        "DisplayName": "[parameters('tagDisplayName')]",
-        "EnvironmentType": "[parameters('tagEnvironmentType')]",
-        "ProjectName": "[parameters('tagProjectName')]",
-        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
-      },
-      "sku": {
-        "name": "standard"
-      },
-      "zones": [
-        "1"
-      ],
-      "properties": {
-        "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
-      }
-    },
     {
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[parameters('NICName')]",
       "apiVersion": "2020-11-01",
       "location": "[parameters('location')]",
       "tags": {
@@ -232,9 +189,10 @@
           {
             "name": "ipconfig1",
             "properties": {
+              "privateIPAddress": "10.0.0.4",
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('existingPIPName'))]"
               },
               "subnet": {
                 "id": "[variables('subnetId')]"
@@ -242,20 +200,24 @@
             }
           }
         ],
+        "dnsSettings": {
+          "dnsServers": []
+        },
+        "enableAcceleratedNetworking": false,
         "enableIPForwarding": true,
         "networkSecurityGroup": {
           "id": "[variables('nsgId')]"
         }
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('existingPIPName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('existingVirtualNetworkName'))]"
       ]
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2021-04-01",
-      "name": "[variables('vmName')]",
+      "name": "[parameters('virtualMachineName')]",
       "location": "[parameters('location')]",
       "tags": {
         "DisplayName": "[parameters('tagDisplayName')]",
@@ -264,7 +226,7 @@
         "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[resourceId('Microsoft.Network/networkInterfaces/', parameters('NICName'))]"
       ],
       "zones": [
         "1"
@@ -274,7 +236,7 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computerName": "[variables('vmName')]",
+          "computerName": "[parameters('virtualMachineComputerName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]",
           "windowsConfiguration": {
@@ -305,7 +267,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]",
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('NICName'))]",
               "properties": {
                 "deleteOption": "[parameters('NICDeleteOption')]"
               }
