@@ -33,11 +33,20 @@
         "secretName": "vm-tcc-password"
       }
     },
-    "existingPIPName": {
+    "existingPublicIPName": {
       "value": "sogeti-pip-tcc-brandreputation-d-we"
     },
-    "PIPResourceGroup": {
+    "publicIPResourceGroup": {
       "value": "sogeti-platform-brandreputation-d"
+    },
+    "privateIPAddress": {
+      "value": "10.0.0.4"
+    },
+    "privateIPAllocationMethod": {
+      "value": "Dynamic"
+    },
+    "privateIPAddressVersion": {
+      "value": "IPv4"
     },
     "existingVirtualNetworkName": {
       "value": "sogeti-vnet-brandreputation-d"

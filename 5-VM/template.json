@@ -53,18 +53,43 @@
           "description": "Specifies a password for the Virtual Machine."
       }
     },
-    "existingPIPName": {
+    "existingPublicIPName": {
       "type": "string",
       "defaultValue": "sogeti-pip-tcc-brandreputation-d-we",
       "metadata": {
         "description": "Name of the existing Public IP."
       }
     },
-    "PIPResourceGroup": {
+    "publicIPResourceGroup": {
       "type": "string",
       "defaultValue": "sogeti-platform-brandreputation-d",
       "metadata": {
         "description": "Resource group of the existing Public IP."
+      }
+    },
+    "privateIPAddress": {
+      "type": "string",
+      "defaultValue": "10.0.0.4",
+      "metadata": {
+        "description": "Adress of the existing Private IP."
+      }
+    },
+    "privateIPAllocationMethod": {
+      "type": "string",
+      "defaultValue": "Dynamic",
+      "allowedValues": [
+        "Dynamic",
+        "Static"
+      ],
+      "metadata": {
+        "description": "Allocation Method of the existing Private IP."
+      }
+    },
+    "privateIPAddressVersion": {
+      "type": "string",
+      "defaultValue": "IPv4",
+      "metadata": {
+        "description": "Version of the existing Private IP."
       }
     },
     "existingVirtualNetworkName": {
@@ -99,7 +124,7 @@
       "type": "string",
       "defaultValue": "sogeti-platform-brandreputation-d",
       "metadata": {
-        "description": "Resource group of the VNet."
+        "description": "Resource group of the Network Security Group."
       }
     },
     "osDiskName": {
@@ -182,10 +207,11 @@
     }
   },
   "variables": {
-    "pipId": "[resourceId(parameters('PIPResourceGroup'), 'Microsoft.Network/publicIPAddresses', parameters('existingPIPName'))]",
+    "pipId": "[resourceId(parameters('publicIPResourceGroup'), 'Microsoft.Network/publicIPAddresses', parameters('existingPublicIPName'))]",
     "vnetId": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('existingVirtualNetworkName'))]",
     "subnetId": "[concat(variables('vnetId'),'/subnets/',parameters('existingSubnetName'))]",
-    "nsgId": "[resourceId(parameters('NSGResourceGroup'), 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
+    "nsgId": "[resourceId(parameters('NSGResourceGroup'), 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]",
+    "nicId": "[resourceId('Microsoft.Network/networkInterfaces',parameters('NICName'))]"
   },
   "resources": [
     {
@@ -199,19 +225,25 @@
         "ProjectName": "[parameters('tagProjectName')]",
         "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
       },
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', parameters('existingPublicIPName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('existingVirtualNetworkName'))]"
+      ],
       "properties": {
         "ipConfigurations": [
           {
             "name": "ipconfig1",
             "properties": {
-              "privateIPAddress": "10.0.0.4",
-              "privateIPAllocationMethod": "Dynamic",
+              "privateIPAllocationMethod": "[parameters('privateIPAllocationMethod')]",
+              "privateIPAddress": "[parameters('privateIPAddress')]",
               "publicIPAddress": {
                 "id": "[variables('pipId')]"
               },
               "subnet": {
                 "id": "[variables('subnetId')]"
-              }
+              },
+              "primary": true,
+              "privateIPAddressVersion": "[parameters('privateIPAddressVersion')]"
             }
           }
         ],
@@ -223,11 +255,7 @@
         "networkSecurityGroup": {
           "id": "[variables('nsgId')]"
         }
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', parameters('existingPIPName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('existingVirtualNetworkName'))]"
-      ]
+      }
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
@@ -282,7 +310,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('NICName'))]",
+              "id": "[variables('nicId')]",
               "properties": {
                 "deleteOption": "[parameters('NICDeleteOption')]"
               }
