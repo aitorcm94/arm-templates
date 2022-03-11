@@ -267,9 +267,6 @@
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces/', parameters('NICName'))]"
       ],
-      "zones": [
-        "1"
-      ],
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
