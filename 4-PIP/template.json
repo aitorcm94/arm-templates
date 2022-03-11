@@ -33,6 +33,10 @@
         "publicIPAllocationMethod": {
             "type": "string",
             "defaultValue": "Static",
+            "allowedValues": [
+                "Static",
+                "Dynamic"
+            ],
             "metadata": {
                 "description": "Static or Dynamic."
             }

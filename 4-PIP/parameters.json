@@ -6,7 +6,28 @@
             "value": "sogeti-pip-tcc-brandreputation-d-we"
         },
         "location": {
-            "value": "[resourceGroup().location]"
+            "value": "West Europe"
+        },
+        "IPAddress": {
+            "value": "104.45.27.160"
+        },
+        "publicIPAddressVersion": {
+            "value": "IPv4"
+        },
+        "publicIPAllocationMethod": {
+            "value": "Static"
+        },
+        "tagDisplayName": {
+            "value": "PIP"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
         }
     }
 }
