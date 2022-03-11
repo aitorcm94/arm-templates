@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "networkInterfaces_sogeti_nic_tcc_brandreputation_d_name": {
+            "defaultValue": "sogeti-nic-tcc-brandreputation-d",
+            "type": "String"
+        },
+        "publicIPAddresses_sogeti_pip_tcc_brandreputation_d_we_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Network/publicIPAddresses/sogeti-pip-tcc-brandreputation-d-we",
+            "type": "String"
+        },
+        "virtualNetworks_sogeti_vnet_brandreputation_d_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Network/virtualNetworks/sogeti-vnet-brandreputation-d",
+            "type": "String"
+        },
+        "networkSecurityGroups_sogeti_nsg_tcc_brandreputation_d_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Network/networkSecurityGroups/sogeti-nsg-tcc-brandreputation-d",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('networkInterfaces_sogeti_nic_tcc_brandreputation_d_name')]",
+            "location": "westeurope",
+            "tags": {
+                "displayName": "NIC",
+                "projectName": "Brand Reputation Prototype",
+                "billingIdentifier": "SogetiLab",
+                "environmentType": "DEV"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAddress": "10.0.0.4",
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[parameters('publicIPAddresses_sogeti_pip_tcc_brandreputation_d_we_externalid')]"
+                            },
+                            "subnet": {
+                                "id": "[concat(parameters('virtualNetworks_sogeti_vnet_brandreputation_d_externalid'), '/subnets/default')]"
+                            },
+                            "primary": true,
+                            "privateIPAddressVersion": "IPv4"
+                        }
+                    }
+                ],
+                "dnsSettings": {
+                    "dnsServers": []
+                },
+                "enableAcceleratedNetworking": false,
+                "enableIPForwarding": false,
+                "networkSecurityGroup": {
+                    "id": "[parameters('networkSecurityGroups_sogeti_nsg_tcc_brandreputation_d_externalid')]"
+                }
+            }
+        }
+    ]
+}

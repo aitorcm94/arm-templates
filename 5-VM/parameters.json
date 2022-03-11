@@ -33,6 +33,12 @@
         "secretName": "vm-tcc-password"
       }
     },
+    "existingPIPName": {
+      "value": "sogeti-pip-tcc-brandreputation-d-we"
+    },
+    "PIPResourceGroup": {
+      "value": "sogeti-platform-brandreputation-d"
+    },
     "existingVirtualNetworkName": {
       "value": "sogeti-vnet-brandreputation-d"
     },
@@ -44,6 +50,9 @@
     },
     "existingNSGName": {
       "value": "sogeti-nsg-tcc-brandreputation-d"
+    },
+    "NSGResourceGroup": {
+      "value": "sogeti-platform-brandreputation-d"
     },
     "osDiskName": {
       "value": "sogeti-datadisk-tcc-OsDisk-1"
@@ -59,9 +68,6 @@
     },
     "NICDeleteOption": {
       "value": "Detach"
-    },
-    "existingPIPName": {
-      "value": "sogeti-pip-tcc-brandreputation-d-we"
     },
     "tagDisplayName": {
       "value": "VM"

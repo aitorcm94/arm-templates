@@ -53,6 +53,20 @@
           "description": "Specifies a password for the Virtual Machine."
       }
     },
+    "existingPIPName": {
+      "type": "string",
+      "defaultValue": "sogeti-pip-tcc-brandreputation-d-we",
+      "metadata": {
+        "description": "Name of the existing Public IP."
+      }
+    },
+    "PIPResourceGroup": {
+      "type": "string",
+      "defaultValue": "sogeti-platform-brandreputation-d",
+      "metadata": {
+        "description": "Resource group of the existing Public IP."
+      }
+    },
     "existingVirtualNetworkName": {
       "type": "string",
       "defaultValue": "sogeti-vnet-brandreputation-d",
@@ -79,6 +93,13 @@
       "defaultValue": "sogeti-nsg-tcc-brandreputation-d",
       "metadata": {
         "description": "Add an existing NSG name."
+      }
+    },
+    "NSGResourceGroup": {
+      "type": "string",
+      "defaultValue": "sogeti-platform-brandreputation-d",
+      "metadata": {
+        "description": "Resource group of the VNet."
       }
     },
     "osDiskName": {
@@ -131,13 +152,6 @@
         "description": "Delete the Network Interface with the VM or Detach it."
       }
     },
-    "existingPIPName": {
-      "type": "string",
-      "defaultValue": "sogeti-pip-tcc-brandreputation-d-we",
-      "metadata": {
-        "description": "Name of the existing Public IP."
-      }
-    },
     "tagDisplayName": {
       "type": "string",
       "defaultValue": "VM",
@@ -167,10 +181,11 @@
       }
     }
   },
-  "variables": {    
+  "variables": {
+    "pipId": "[resourceId(parameters('PIPResourceGroup'), 'Microsoft.Network/publicIPAddresses', parameters('existingPIPName'))]",
     "vnetId": "[resourceId(parameters('virtualNetworkResourceGroup'),'Microsoft.Network/virtualNetworks',parameters('existingVirtualNetworkName'))]",
     "subnetId": "[concat(variables('vnetId'),'/subnets/',parameters('existingSubnetName'))]",
-    "nsgId": "[resourceId(resourceGroup().name, 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
+    "nsgId": "[resourceId(parameters('NSGResourceGroup'), 'Microsoft.Network/networkSecurityGroups', parameters('existingNSGName'))]"
   },
   "resources": [
     {
@@ -192,7 +207,7 @@
               "privateIPAddress": "10.0.0.4",
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('existingPIPName'))]"
+                "id": "[variables('pipId')]"
               },
               "subnet": {
                 "id": "[variables('subnetId')]"
