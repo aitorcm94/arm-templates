@@ -5,8 +5,29 @@
         "virtualNetworksName": {
             "value": "sogeti-vnet-brandreputation-d"
         },
+        "location": {
+            "value": "West Europe"
+        },
         "addressSpace": {
             "value": "10.0.0.0/16"
+        },
+        "subNetName": {
+            "value": "default"
+        },
+        "subNetAddressPrefix": {
+            "value": "10.0.0.0/24"
+        },
+        "tagDisplayName": {
+            "value": "VNET"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
         }
     }
 }
