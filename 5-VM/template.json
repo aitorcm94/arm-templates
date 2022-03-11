@@ -140,7 +140,7 @@
     },
     "tagDisplayName": {
       "type": "string",
-      "defaultValue": "PIP",
+      "defaultValue": "VM",
       "metadata": {
         "description": "Tag for the Display Name."
       }

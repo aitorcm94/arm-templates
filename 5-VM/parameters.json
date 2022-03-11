@@ -1,43 +1,79 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "virtualMachineName": {
-        "value": "sogeti-vm-tcc-brandreputation-d"
-      },
-      "virtualMachineComputerName": {
-        "value": "sogeti-vm-tcc-b"
-      },
-      "adminUsername": {
-        "reference":{
-          "keyVault": {
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachineName": {
+      "value": "sogeti-vm-tcc-brandreputation-d"
+    },
+    "virtualMachineComputerName": {
+      "value": "sogeti-vm-tcc-b"
+    },
+    "location": {
+      "value": "West Europe"
+    },
+    "windowsOSVersion": {
+      "value": "2019-Datacenter"
+    },
+    "vmSize": {
+      "value": "Standard_B2s"
+    },
+    "adminUsername": {
+      "reference":{
+        "keyVault": {
           "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
-          },
-          "secretName": "vm-tcc-username"
-        }
-      },
-      "adminPassword": {
-        "reference":{
-          "keyVault": {
-          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
-          },
-          "secretName": "vm-tcc-password"
-        }
-      },
-      "existingVirtualNetworkName": {
-        "value": "sogeti-vnet-brandreputation-d"
-      },
-      "virtualNetworkResourceGroup": {
-        "value": "sogeti-platform-brandreputation-d"
-      },
-      "existingSubnetName": {
-        "value": "default"
-      },
-      "existingNSGName": {
-        "value": "sogeti-nsg-tcc-brandreputation-d"
-      },
-      "NICName": {
-        "value": "sogeti-nic-tcc-brandreputation-d"
+        },
+        "secretName": "vm-tcc-username"
       }
+    },
+    "adminPassword": {
+      "reference":{
+        "keyVault": {
+          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
+        },
+        "secretName": "vm-tcc-password"
+      }
+    },
+    "existingVirtualNetworkName": {
+      "value": "sogeti-vnet-brandreputation-d"
+    },
+    "virtualNetworkResourceGroup": {
+      "value": "sogeti-platform-brandreputation-d"
+    },
+    "existingSubnetName": {
+      "value": "default"
+    },
+    "existingNSGName": {
+      "value": "sogeti-nsg-tcc-brandreputation-d"
+    },
+    "osDiskName": {
+      "value": "sogeti-datadisk-tcc-OsDisk-1"
+    },
+    "osDiskType": {
+      "value": "StandardSSD_LRS"
+    },
+    "osDiskDeleteOption": {
+      "value": "Delete"
+    },
+    "NICName": {
+      "value": "sogeti-nic-tcc-brandreputation-d"
+    },
+    "NICDeleteOption": {
+      "value": "Detach"
+    },
+    "existingPIPName": {
+      "value": "sogeti-pip-tcc-brandreputation-d-we"
+    },
+    "tagDisplayName": {
+      "value": "VM"
+    },
+    "tagEnvironmentType": {
+      "value": "DEV"
+    },
+    "tagProjectName": {
+      "value": "Brand Reputation Prototype"
+    },
+    "tagBillingIdentifier": {
+      "value": "SogetiLab"
     }
   }
+}
