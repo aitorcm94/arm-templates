@@ -225,10 +225,6 @@
         "ProjectName": "[parameters('tagProjectName')]",
         "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', parameters('existingPublicIPName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('existingVirtualNetworkName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
