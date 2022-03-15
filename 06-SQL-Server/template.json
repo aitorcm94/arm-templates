@@ -18,14 +18,12 @@
     },
     "sqlAdministratorLogin": {
       "type": "string",
-      "defaultValue": "adminSQL",
       "metadata": {
         "description": "The administrator username of the SQL Server."
       }
     },
     "sqlAdministratorLoginPassword": {
       "type": "securestring",
-      "defaultValue": "Administrador1",
       "metadata": {
         "description": "The administrator password of the SQL Server."
       }

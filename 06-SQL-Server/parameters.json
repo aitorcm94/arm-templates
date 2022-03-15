@@ -9,10 +9,20 @@
       "value": "[resourceGroup().location]"
     },
     "sqlAdministratorLogin": {
-      "value": "adminSQL"
+      "reference":{
+        "keyVault": {
+          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
+        },
+        "secretName": "vm-sql-username"
+      }
     },
     "sqlAdministratorLoginPassword": {
-      "value": "Administrador1"
+      "reference":{
+        "keyVault": {
+          "id":"/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-core-brandreputation-d/providers/Microsoft.KeyVault/vaults/sogeti-kv-br-d"
+        },
+        "secretName": "vm-sql-password"
+      }
     },
     "publicNetworkAccess": {
       "value": "Enabled"
