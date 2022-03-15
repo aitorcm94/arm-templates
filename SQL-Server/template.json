@@ -4,9 +4,9 @@
   "parameters": {
     "sqlServerName": {
       "type": "string",
-      "defaultValue": "[concat('server-', uniqueString(resourceGroup().id, deployment().name))]",
+      "defaultValue": "sogeti-sql-brandreputation-d",
       "metadata": {
-        "description": "Name of the SQL server"
+        "description": "Name of the SQL server."
       }
     },
     "location": {
@@ -18,21 +18,99 @@
     },
     "sqlAdministratorLogin": {
       "type": "string",
+      "defaultValue": "adminSQL",
       "metadata": {
         "description": "The administrator username of the SQL Server."
       }
     },
     "sqlAdministratorLoginPassword": {
       "type": "securestring",
+      "defaultValue": "Administrador1",
       "metadata": {
         "description": "The administrator password of the SQL Server."
       }
     },
-    "isMSDevopsAuditEnabled": {
-      "type": "bool",
-      "defaultValue": false,
+    "publicNetworkAccess": {
+      "type": "securestring",
+      "defaultValue": "Enabled",
+      "allowedValues": [
+        "Enabled",
+        "Disabled"
+      ],
       "metadata": {
-          "description": "Enable Auditing of Microsoft support operations (DevOps)"
+        "description": "Whether or not public endpoint access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'."
+      }
+    },
+    "restrictOutboundNetworkAccess": {
+      "type": "securestring",
+      "defaultValue": "Disabled",
+      "allowedValues": [
+        "Enabled",
+        "Disabled"
+      ],
+      "metadata": {
+        "description": "Whether or not public endpoint access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'."
+      }
+    },
+    "version": {
+      "type": "string",
+      "defaultValue": "12.0",
+      "metadata": {
+        "description": "The version of the server."
+      }
+    },
+    "connectionType": {
+      "type": "securestring",
+      "defaultValue": "Default",
+      "allowedValues": [
+        "Default",
+        "Proxy",
+        "Redirect"
+      ],
+      "metadata": {
+        "description": "The server connection type. Can be Default, Proxy or Redirect."
+      }
+    },
+    "startIpAddress": {
+      "type": "string",
+      "defaultValue": "0.0.0.0",
+      "metadata": {
+        "description": "The start IP address of the firewall rule. Must be IPv4 format. Use value '0.0.0.0' for all Azure-internal IP addresses."
+      }
+    },
+    "endIpAddress": {
+      "type": "string",
+      "defaultValue": "0.0.0.0",
+      "metadata": {
+        "description": "The end IP address of the firewall rule. Must be IPv4 format. Must be greater than or equal to startIpAddress. Use value '0.0.0.0' for all Azure-internal IP addresses."
+      }
+    },
+    "tagDisplayName": {
+      "type": "string",
+      "defaultValue": "SQL",
+      "metadata": {
+        "description": "Tag for the Display Name."
+      }
+    },
+    "tagEnvironmentType": {
+      "type": "string",
+      "defaultValue": "DEV",
+      "metadata": {
+        "description": "Tag for the Environment Type."
+      }
+    },
+    "tagProjectName": {
+      "type": "string",
+      "defaultValue": "Brand Reputation Prototype",
+      "metadata": {
+        "description": "Tag for the Project Name."
+      }
+    },
+    "tagBillingIdentifier": {
+      "type": "string",
+      "defaultValue": "SogetiLab",
+      "metadata": {
+        "description": "Tag for the Billing Identifier."
       }
     }
   },
@@ -41,44 +119,44 @@
     {
       "type": "Microsoft.Sql/servers",
       "apiVersion": "2019-06-01-preview",
-      "location": "[parameters('location')]",
       "name": "[parameters('sqlServerName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+          "displayName": "[parameters('tagDisplayName')]",
+          "environmentType": "[parameters('tagEnvironmentType')]",
+          "projectName": "[parameters('tagProjectName')]",
+          "billingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
       "properties": {
         "administratorLogin": "[parameters('sqlAdministratorLogin')]",
         "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-        "version": "12.0"
-      },
-      "tags": {
-        "DisplayName": "[parameters('sqlServerName')]"
+        "publicNetworkAccess": "[parameters('publicNetworkAccess')]",
+        "restrictOutboundNetworkAccess": "[parameters('restrictOutboundNetworkAccess')]",
+        "version": "[parameters('version')]"
       },
       "resources": [
         {
-          "type": "databases",
-          "apiVersion": "2019-06-01-preview",
+          "type": "Microsoft.Sql/servers/connectionPolicies",
+          "apiVersion": "2021-08-01-preview",
+          "name": "[concat(parameters('sqlServerName'), '/default')]",
           "location": "[parameters('location')]",
-          "dependsOn": ["[parameters('sqlServerName')]"],
-          "name": "master",
-          "properties": {}
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+            ],
+            "properties": {
+              "connectionType": "[parameters('connectionType')]"
+            }
         },
         {
-          "apiVersion": "2017-03-01-preview",
-          "type": "auditingSettings",
-          "name": "DefaultAuditingSettings",
-          "dependsOn": ["[parameters('sqlServerName')]"],
+          "type": "Microsoft.Sql/servers/firewallRules",
+          "apiVersion": "2021-08-01-preview",
+          "name": "[concat(parameters('sqlServerName'), '/AllowAllWindowsAzureIps')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ],
           "properties": {
-            "State": "Enabled",
-            "isAzureMonitorTargetEnabled": true
-          }
-        },
-        {
-          "condition": "[parameters('isMSDevopsAuditEnabled')]",
-          "type": "devOpsAuditingSettings",
-          "apiVersion": "2020-08-01-preview",
-          "name": "Default",
-          "dependsOn": ["[parameters('sqlServerName')]"],
-          "properties": {
-            "State": "Enabled",
-            "isAzureMonitorTargetEnabled": true
+            "startIpAddress": "[parameters('startIpAddress')]",
+            "endIpAddress": "[parameters('endIpAddress')]"
           }
         }
       ]

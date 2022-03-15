@@ -3,19 +3,43 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sqlServerName": {
-      "value": "[concat('server-', uniqueString(resourceGroup().id, deployment().name))]"
+      "value": "sogeti-sql-brandreputation-d"
     },
     "location": {
       "value": "[resourceGroup().location]"
     },
     "sqlAdministratorLogin": {
-      "value": "null"
+      "value": "adminSQL"
     },
     "sqlAdministratorLoginPassword": {
-      "value": "null"
+      "value": "Administrador1"
     },
-    "isMSDevopsAuditEnabled": {
-      "value": false
+    "publicNetworkAccess": {
+      "value": "Enabled"
+    },
+    "restrictOutboundNetworkAccess": {
+      "value": "Disabled"
+    },
+    "version": {
+      "value": "12.0"
+    },
+    "connectionType": {
+      "value": "Default"
+    },
+    "startIpAddress": {
+      "value": "94.73.44.19"
+    },
+    "tagDisplayName": {
+      "value": "SQL"
+    },
+    "tagEnvironmentType": {
+      "value": "DEV"
+    },
+    "tagProjectName": {
+      "value": "Brand Reputation Prototype"
+    },
+    "tagBillingIdentifier": {
+      "value": "SogetiLab"
     }
   }
 }

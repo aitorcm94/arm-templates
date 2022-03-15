@@ -54,40 +54,6 @@
     },
     "resources": [
         {
-            "condition": "[parameters('enableVA')]",
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-04-01",
-            "name": "[variables('storageName')]",
-            "location": "[parameters('location')]",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
-            "properties": {
-                "minimumTlsVersion": "TLS1_2",
-                "supportsHttpsTrafficOnly": "true",
-                "allowBlobPublicAccess": "false"
-            },
-            "resources": [
-                {
-                    "condition": "[parameters('useVAManagedIdentity')]",
-                    "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
-                    "apiVersion": "2018-09-01-preview",
-                    "name": "[concat(variables('storageName'), '/Microsoft.Authorization/', variables('uniqueRoleGuid') )]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]",
-                        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]"
-                    ],
-                    "properties": {
-                        "roleDefinitionId": "[variables('StorageBlobContributor')]",
-                        "principalId": "[reference(resourceId('Microsoft.Sql/servers', parameters('serverName')), '2018-06-01-preview', 'Full').identity.principalId]",
-                        "scope": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageName'))]",
-                        "principalType": "ServicePrincipal"
-                    }
-                }
-            ]
-        },
-        {
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2020-11-01-preview",
             "name": "[parameters('serverName')]",
@@ -103,7 +69,7 @@
                 {
                     "condition": "[parameters('allowAzureIPs')]",
                     "type": "firewallRules",
-                    "apiVersion": "2014-04-01-preview",
+                    "apiVersion": "2021-05-01-previe",
                     "name": "AllowAllWindowsAzureIps",
                     "location": "[parameters('location')]",
                     "dependsOn": [

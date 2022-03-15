@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sqlServerName": {
+      "value": "[concat('sql-', uniqueString(resourceGroup().id))]"
+    },
+    "location": {
+      "value": "[resourceGroup().location]"
+    },
+    "sqlAdministratorLogin": {
+      "value": "null"
+    },
+    "sqlAdministratorLoginPassword": {
+      "value": "null"
+    },
+    "storageAccountName": {
+      "value": "[concat('sqlaudit', uniqueString(resourceGroup().id))]"
+    },
+    "isStorageBehindVnet": {
+      "value": false
+    },
+    "isMSDevOpsAuditEnabled": {
+      "value": false
+    }
+  }
+}
