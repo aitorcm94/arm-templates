@@ -107,17 +107,6 @@
                 "description": "The state of read-only routing. If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica in the same region. Not applicable to a Hyperscale database within an elastic pool."
             }
         },
-        "transparentDataEncryption": {
-            "type": "string",
-            "defaultValue": "Enabled",
-            "allowedValues": [
-                "Enabled",
-                "Disabled"                
-            ],
-            "metadata": {
-                "description": "Specifies the state of the transparent data encryption."
-            }
-        },
         "tagDisplayName": {
             "type": "string",
             "defaultValue": "SQLDB",
@@ -148,8 +137,6 @@
         }
     },
     "variables": {
-        //"maintenanceConfigurationId": "/subscriptions/2d813ed9-ea02-43dc-a672-3744656a9d1b/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default"
-        //"maintenanceConfigurationId": "[resourceId(parameters('databaseResourceGroup'), 'Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
         "maintenanceConfigurationId": "[concat('/subscriptions/', parameters('subscriptionID'), '/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
     },
     "resources": [
@@ -180,17 +167,6 @@
                 "isLedgerOn": false
             },
             "resources": [
-                {
-                    "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
-                    "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/', parameters('NewSQLDatabaseName'), '/Current')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), parameters('NewSQLDatabaseName'))]"
-                    ],
-                    "properties": {
-                        "state": "[parameters('transparentDataEncryption')]"
-                    }
-                },
                 {
                     "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
                     "apiVersion": "2021-08-01-preview",

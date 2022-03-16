@@ -41,9 +41,6 @@
         "readScale": {
             "value": "Disabled"
         },
-        "transparentDataEncryption": {
-            "value": "Enabled"
-        },
         "tagDisplayName": {
             "value": "SQLDB"
         },
