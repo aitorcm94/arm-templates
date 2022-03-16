@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "NewSQLDatabaseName": {
+            "value": "sogeti-sqldb1-brandreputation-d"
+        },
+        "ExistingSQLServerName": {
+            "value": "sogeti-sql-brandreputation-d"
+        },
+        "subscriptionID": {
+            "value": "3f26cf74-4de5-43d8-9c14-945c5594b176"
+        },
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "SKUName": {
+            "value": "Basic"
+        },
+        "ServiceTier": {
+            "value": "Basic"
+        },
+        "capacity": {
+            "value": 5
+        },
+        "collation": {
+            "value": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "catalogCollation": {
+            "value": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "maxSizeBytes": {
+            "value": 2147483648
+        },
+        "zoneRedundant": {
+            "value": false
+        },
+        "requestedBackupStorageRedundancy": {
+            "value": "Local"
+        },
+        "readScale": {
+            "value": "Disabled"
+        },
+        "transparentDataEncryption": {
+            "value": "Enabled"
+        },
+        "tagDisplayName": {
+            "value": "SQLDB"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
+        }
+    }
+}

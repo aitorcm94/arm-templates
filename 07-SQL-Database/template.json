@@ -16,11 +16,106 @@
                 "description": "Name of the exisiting SQL server."
             }
         },
+        "subscriptionID": {
+            "type": "string",
+            "defaultValue": "3f26cf74-4de5-43d8-9c14-945c5594b176",
+            "metadata": {
+                "description": "ID of the used subscription."
+            }
+        },
         "location": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Location for all resources."
+            }
+        },
+        "SKUName": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "metadata": {
+                "description": "The name of the SKU, typically, a letter + Number code, e.g. P3."
+            }
+        },
+        "ServiceTier": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "metadata": {
+                "description": "The tier or edition of the particular SKU, e.g. Basic, Premium."
+            }
+        },
+        "capacity": {
+            "type": "int",
+            "defaultValue": 5,
+            "metadata": {
+                "description": "Capacity of the particular SKU.(DTUs)"
+            }
+        },
+        "collation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
+            "metadata": {
+                "description": "Database collation defines the rules that sort and compare data, and cannot be changed after database creation. The default database collation is SQL_Latin1_General_CP1_CI_AS."
+            }
+        },
+        "catalogCollation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
+            "allowedValues": [
+                "DATABASE_DEFAULT",
+                "SQL_Latin1_General_CP1_CI_AS"
+            ],
+            "metadata": {
+                "description": "Collation of the metadata catalog."
+            }
+        },
+        "maxSizeBytes": {
+            "type": "int",
+            "defaultValue": 2147483648,
+            "metadata": {
+                "description": "The max size of the database expressed in bytes."
+            }
+        },
+        "zoneRedundant": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Whether or not this database is zone redundant, which means the replicas of this database will be spread across multiple availability zones."
+            }
+        },
+        "requestedBackupStorageRedundancy": {
+            "type": "string",
+            "defaultValue": "Local",
+            "allowedValues": [
+                "Geo",
+                "GeoZone",
+                "Local",
+                "Zone"
+            ],
+            "metadata": {
+                "description": "The storage account type used to store backups for this database."
+            }
+        },
+        "readScale": {
+            "type": "string",
+            "defaultValue": "Disabled",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"                
+            ],
+            "metadata": {
+                "description": "The state of read-only routing. If enabled, connections that have application intent set to readonly in their connection string may be routed to a readonly secondary replica in the same region. Not applicable to a Hyperscale database within an elastic pool."
+            }
+        },
+        "transparentDataEncryption": {
+            "type": "string",
+            "defaultValue": "Enabled",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"                
+            ],
+            "metadata": {
+                "description": "Specifies the state of the transparent data encryption."
             }
         },
         "tagDisplayName": {
@@ -50,80 +145,12 @@
             "metadata": {
                 "description": "Tag for the Billing Identifier."
             }
-        },
-        "collation": {
-            "type": "string",
-            "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
-            "metadata": {
-                "description": "Database collation defines the rules that sort and compare data, and cannot be changed after database creation. The default database collation is SQL_Latin1_General_CP1_CI_AS."
-            }
-        },
-        "maxSizeBytes": {
-            "type": "int",
-            "defaultValue": 2147483648,
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "catalogCollation": {
-            "type": "string",
-            "defaultValue": "SQL_Latin1_General_CP1_CI_AS",
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "zoneRedundant": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "readScale": {
-            "type": "string",
-            "defaultValue": "Disabled",
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "requestedBackupStorageRedundancy": {
-            "type": "string",
-            "defaultValue": "Local",
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "isLedgerOn": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "name": {
-            "type": "string",
-            "defaultValue": "Basic",
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "tier": {
-            "type": "string",
-            "defaultValue": "Basic",
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
-        },
-        "capacity": {
-            "type": "int",
-            "defaultValue": 5,
-            "metadata": {
-                "description": "Tag for the Billing Identifier."
-            }
         }
     },
     "variables": {
-        "maintenanceConfigurationId": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default"
+        //"maintenanceConfigurationId": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+        //"maintenanceConfigurationId": "[resourceId(parameters('databaseResourceGroup'), 'Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
+        "maintenanceConfigurationId": "[concat('/subscription/', parameters('subscriptionID'), '/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
     },
     "resources": [
         {
@@ -138,34 +165,30 @@
                 "billingIdentifier": "[parameters('tagBillingIdentifier')]"
             },
             "sku": {
-                "name": "Basic",
-                "tier": "Basic",
-                "capacity": 5
+                "name": "[parameters('SKUName')]",
+                "tier": "[parameters('ServiceTier')]",
+                "capacity": "[parameters('capacity')]"
             },
             "properties": {
-                "collation": "SQL_Latin1_General_CP1_CI_AS",
-                "maxSizeBytes": 2147483648,
-                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
-                "zoneRedundant": false,
-                "readScale": "Disabled",
-                "requestedBackupStorageRedundancy": "Local",
-                "maintenanceConfigurationId": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "collation": "[parameters('collation')]",
+                "catalogCollation": "[parameters('catalogCollation')]",
+                "maxSizeBytes": "[parameters('maxSizeBytes')]",
+                "zoneRedundant": "[parameters('zoneRedundant')]",
+                "requestedBackupStorageRedundancy": "[parameters('requestedBackupStorageRedundancy')]",
+                "readScale": "[parameters('readScale')]",
+                "maintenanceConfigurationId": "[variables('maintenanceConfigurationId')]",
                 "isLedgerOn": false
             },
             "resources": [
                 {
-                    "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
+                    "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
                     "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/default')]",
+                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/Current')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]",
-                        "[resourceId('Microsoft.Sql/servers', parameters('ExistingSQLServerName'))]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
                     ],
                     "properties": {
-                        "weeklyRetention": "PT0S",
-                        "monthlyRetention": "PT0S",
-                        "yearlyRetention": "PT0S",
-                        "weekOfYear": 0
+                        "state": "[parameters('transparentDataEncryption')]"
                     }
                 },
                 {
@@ -173,8 +196,7 @@
                     "apiVersion": "2021-08-01-preview",
                     "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/default')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]",
-                        "[resourceId('Microsoft.Sql/servers', parameters('ExistingSQLServerName'))]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
                     ],
                     "properties": {
                         "retentionDays": 7,
@@ -182,25 +204,17 @@
                     }
                 },
                 {
-                    "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
+                    "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
                     "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/Current')]",
+                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/default')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]",
-                        "[resourceId('Microsoft.Sql/servers', parameters('ExistingSQLServerName'))]"
-                    ],
-                    "properties": {}
-                },
-                {
-                    "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
-                    "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/Current')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]",
-                        "[resourceId('Microsoft.Sql/servers', parameters('ExistingSQLServerName'))]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
                     ],
                     "properties": {
-                        "state": "Enabled"
+                        "weeklyRetention": "PT0S",
+                        "monthlyRetention": "PT0S",
+                        "yearlyRetention": "PT0S",
+                        "weekOfYear": 0
                     }
                 }
             ]
