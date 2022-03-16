@@ -183,9 +183,9 @@
                 {
                     "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
                     "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/Current')]",
+                    "name": "[concat(parameters('ExistingSQLServerName'), '/', parameters('NewSQLDatabaseName'), '/Current')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), parameters('NewSQLDatabaseName'))]"
                     ],
                     "properties": {
                         "state": "[parameters('transparentDataEncryption')]"
@@ -194,9 +194,9 @@
                 {
                     "type": "Microsoft.Sql/servers/databases/backupShortTermRetentionPolicies",
                     "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/default')]",
+                    "name": "[concat(parameters('ExistingSQLServerName'), '/', parameters('NewSQLDatabaseName'), '/default')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), parameters('NewSQLDatabaseName'))]"
                     ],
                     "properties": {
                         "retentionDays": 7,
@@ -206,9 +206,9 @@
                 {
                     "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
                     "apiVersion": "2021-08-01-preview",
-                    "name": "[concat(parameters('ExistingSQLServerName'), '/sogeti-sqldb1-brandreputation-d/default')]",
+                    "name": "[concat(parameters('ExistingSQLServerName'), '/', parameters('NewSQLDatabaseName'), '/default')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), 'sogeti-sqldb1-brandreputation-d')]"
+                        "[resourceId('Microsoft.Sql/servers/databases', parameters('ExistingSQLServerName'), parameters('NewSQLDatabaseName'))]"
                     ],
                     "properties": {
                         "weeklyRetention": "PT0S",
