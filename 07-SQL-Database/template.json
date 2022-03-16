@@ -148,9 +148,9 @@
         }
     },
     "variables": {
-        //"maintenanceConfigurationId": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+        //"maintenanceConfigurationId": "/subscriptions/2d813ed9-ea02-43dc-a672-3744656a9d1b/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default"
         //"maintenanceConfigurationId": "[resourceId(parameters('databaseResourceGroup'), 'Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
-        "maintenanceConfigurationId": "[concat('/subscription/', parameters('subscriptionID'), '/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
+        "maintenanceConfigurationId": "[concat('/subscriptions/', parameters('subscriptionID'), '/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]"
     },
     "resources": [
         {
@@ -214,7 +214,7 @@
                         "weeklyRetention": "PT0S",
                         "monthlyRetention": "PT0S",
                         "yearlyRetention": "PT0S",
-                        "weekOfYear": 0
+                        "weekOfYear": 1
                     }
                 }
             ]
