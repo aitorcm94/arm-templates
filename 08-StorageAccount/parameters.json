@@ -1,14 +1,14 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "value": "westeurope"
-        },
         "storageAccountName": {
-            "value": "demoaitor2"
+            "value": "sogetiplatformbrandbf6a"
         },
-        "accountType": {
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "storageAccountReplication": {
             "value": "Standard_LRS"
         },
         "kind": {
@@ -47,38 +47,20 @@
         "encryptionEnabled": {
             "value": true
         },
-        "keyTypeForTableAndQueueEncryption": {
-            "value": "Account"
-        },
         "infrastructureEncryptionEnabled": {
-            "value": false
-        },
-        "isContainerRestoreEnabled": {
-            "value": false
-        },
-        "isBlobSoftDeleteEnabled": {
             "value": true
         },
-        "blobSoftDeleteRetentionDays": {
-            "value": 7
+        "tagDisplayName": {
+            "value": "FUNC"
         },
-        "isContainerSoftDeleteEnabled": {
-            "value": true
+        "tagEnvironmentType": {
+            "value": "DEV"
         },
-        "containerSoftDeleteRetentionDays": {
-            "value": 7
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
         },
-        "changeFeed": {
-            "value": false
-        },
-        "isVersioningEnabled": {
-            "value": false
-        },
-        "isShareSoftDeleteEnabled": {
-            "value": true
-        },
-        "shareSoftDeleteRetentionDays": {
-            "value": 7
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
         }
     }
 }
