@@ -1,0 +1,65 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "serviceBusNamespaceName": {
+            "type": "String",
+            "metadata": {
+                "description": "Name of the Service Bus namespace"
+            }
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "skuTier": {
+            "type": "String",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "Premium",
+                "Standard"
+            ],
+            "metadata": {
+                "description": "The billing tier of this particular SKU."
+            }
+        },
+        "skuCapacity": {
+            "type": "Int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "The specified messaging units for the tier. For Premium tier, capacity are 1,2 and 4."
+            }
+        },
+        "zoneRedundant": {
+            "type": "Bool"
+        },
+        "tags": {
+            "type": "Object",
+            "defaultValue": {
+            "Environment": "Dev",
+            "Project": "Tutorial"
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ServiceBus/namespaces",
+            "apiVersion": "2021-06-01-preview",
+            "name": "[parameters('serviceBusNamespaceName')]",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('tags')]",
+            "sku": {
+                "name": "[parameters('skuTier')]",
+                "tier": "[parameters('skuTier')]",
+                "capacity": "[parameters('skuCapacity')]"
+            },
+            "properties": {
+                "zoneRedundant": "[parameters('zoneRedundant')]"
+            }
+        }
+    ]
+}
