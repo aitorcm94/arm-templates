@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serviceBusNamespaceName": {
-            "value": "demoacm"
+            "value": "sb-pocacm-dev"
         },
         "location": {
             "value": "westeurope"
         },
         "skuTier": {
-            "value": "Basic"
+            "value": "Standard"
         },
         "skuCapacity": {
             "value": 1

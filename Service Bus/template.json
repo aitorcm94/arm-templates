@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01-preview/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "serviceBusNamespaceName": {
@@ -17,11 +17,11 @@
         },
         "skuTier": {
             "type": "String",
-            "defaultValue": "Basic",
+            "defaultValue": "Standard",
             "allowedValues": [
                 "Basic",
-                "Premium",
-                "Standard"
+                "Standard",
+                "Premium"
             ],
             "metadata": {
                 "description": "The billing tier of this particular SKU."
