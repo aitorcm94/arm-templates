@@ -129,6 +129,20 @@
         "description": "Specifies the default action of allow or deny when no other rules match."
       }
     },
+    "isHnsEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Account HierarchicalNamespace enabled if sets to true."
+      }
+    },
+    "isSftpEnabled": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Enables Secure File Transfer Protocol, if set to true."
+      }
+    },
     "keySource": {
       "type": "string",
       "defaultValue": "Microsoft.Storage",
@@ -209,25 +223,27 @@
         "defaultToOAuthAuthentication": "[parameters('defaultOAuth')]",
         "networkAcls": {
           "bypass": "[parameters('networkAclsBypass')]",
-          "defaultAction": "[parameters('networkAclsDefaultAction')]",
-          "encryption": {
-            "keySource": "[parameters('keySource')]",
-            "services": {
-              "blob": {
-                "enabled": "[parameters('encryptionEnabled')]"
-              },
-              "file": {
-                "enabled": "[parameters('encryptionEnabled')]"
-              },
-              "table": {
-                "enabled": "[parameters('encryptionEnabled')]"
-              },
-              "queue": {
-                "enabled": "[parameters('encryptionEnabled')]"
-              }
+          "defaultAction": "[parameters('networkAclsDefaultAction')]"
+        },
+        "isHnsEnabled": "[parameters('isHnsEnabled')]",
+        "isSftpEnabled": "[parameters('isSftpEnabled')]",
+        "encryption": {
+          "keySource": "[parameters('keySource')]",
+          "services": {
+            "blob": {
+              "enabled": "[parameters('encryptionEnabled')]"
             },
-            "requireInfrastructureEncryption": "[parameters('infrastructureEncryptionEnabled')]"
-          }
+            "file": {
+              "enabled": "[parameters('encryptionEnabled')]"
+            },
+            "table": {
+              "enabled": "[parameters('encryptionEnabled')]"
+            },
+            "queue": {
+              "enabled": "[parameters('encryptionEnabled')]"
+            }
+          },
+          "requireInfrastructureEncryption": "[parameters('infrastructureEncryptionEnabled')]"
         }
       }
     }

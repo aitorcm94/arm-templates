@@ -41,6 +41,12 @@
         "networkAclsDefaultAction": {
             "value": "Allow"
         },
+        "isHnsEnabled": {
+            "value": true
+        },
+        "isSftpEnabled": {
+            "value": false
+        },
         "keySource": {
             "value": "Microsoft.Storage"
         },
