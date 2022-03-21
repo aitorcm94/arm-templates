@@ -40,8 +40,8 @@
         "tags": {
             "type": "Object",
             "defaultValue": {
-            "Environment": "Dev",
-            "Project": "Tutorial"
+                "Environment": "Dev",
+                "Project": "Tutorial"
             }
         }
     },

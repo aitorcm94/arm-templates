@@ -1,0 +1,121 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "sogeti-appsp-brandreputation-d",
+            "metadata": {
+                "description": "Name of the Service Plan location."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Service Plan location, default is same as resource group location."
+            }
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "D1",
+            "allowedValues": [
+                "Y1",
+                "B1",
+                "D1"
+            ],
+            "metadata": {
+                "description": "SKU name of the App Service Plan. Must be pared with the SKU tier."
+            }
+        },
+        "skutier": {
+            "type": "string",
+            "defaultValue": "Shared",
+            "allowedValues": [
+                "Dynamic",
+                "Basic",
+                "Shared"
+            ],
+            "metadata": {
+                "description": "SKU tier for Azure app service plan (server farm). Must be pared with the SKU name."
+            }
+        },
+        "kind": {
+            "type": "string",
+            "defaultValue": "app",
+            "allowedValues": [
+                "app",
+                "linux"
+            ],
+            "metadata": {
+                "description": "Kind of resource."
+            }
+        },
+        "reserved": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "If Linux app service plan true, false otherwise."
+            }
+        },
+        "tagDisplayName": {
+            "type": "string",
+            "defaultValue": "APPSP",
+            "metadata": {
+                "description": "Tag for the Display Name."
+            }
+        },
+        "tagEnvironmentType": {
+            "type": "string",
+            "defaultValue": "DEV",
+            "metadata": {
+                "description": "Tag for the Environment Type."
+            }
+        },
+        "tagProjectName": {
+            "type": "string",
+            "defaultValue": "Brand Reputation Prototype",
+            "metadata": {
+                "description": "Tag for the Project Name."
+            }
+        },
+        "tagBillingIdentifier": {
+            "type": "string",
+            "defaultValue": "SogetiLab",
+            "metadata": {
+                "description": "Tag for the Billing Identifier."
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('tagDisplayName')]",
+                "environmentType": "[parameters('tagEnvironmentType')]",
+                "projectName": "[parameters('tagProjectName')]",
+                "billingIdentifier": "[parameters('tagBillingIdentifier')]"
+            },
+            "sku": {
+                "Name": "[parameters('skuName')]",
+                "Tier": "[parameters('skutier')]"
+            },
+            "kind": "[parameters('kind')]",
+            "properties": {
+                "reserved": "[parameters('reserved')]",
+                "perSiteScaling": false,
+                "elasticScaleEnabled": false,
+                "maximumElasticWorkerCount": 1,
+                "isSpot": false,
+                "isXenon": false,
+                "hyperV": false,
+                "targetWorkerCount": 0,
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
+            }
+        }
+    ]
+}

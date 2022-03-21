@@ -1,0 +1,117 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "defaultValue": "sogetiplatformbrandbf6a",
+            "metadata": {
+                "description": "Name of the Storage Account."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Storage Account location, default is same as resource group location."
+            }
+        },
+        "storageAccountKind": {
+            "type": "string",
+            "defaultValue": "Storage",
+            "allowedValues": [
+                "Storage",
+                "StorageV2"
+            ],
+            "metadata": {
+                "description": "Indicates the type of storage account."
+            }
+        },
+        "storageAccountReplication": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Premium_LRS",
+                "Premium_ZRS",
+                "Standard_GRS",
+                "Standard_GZRS",
+                "Standard_LRS",
+                "Standard_RAGRS",
+                "Standard_RAGZRS",
+                "Standard_ZRS"
+            ],
+            "metadata": {
+                "description": "Storage account replication, for more info see 'https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy'."
+            }
+        },
+        "supportsHttpsTrafficOnly": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Allows https traffic only to storage service if sets to true. The default value is true since API version 2019-04-01."
+            }
+        },
+        "minimumTlsVersion": {
+            "type": "string",
+            "defaultValue": "TLS1_2",
+            "allowedValues": [
+                "TLS1_0",
+                "TLS1_1",
+                "TLS1_2"
+            ],
+            "metadata": {
+                "description": "Set the minimum TLS version to be permitted on requests to storage. The default interpretation is TLS 1.0 for this property."
+            }
+        },
+        "tagDisplayName": {
+            "type": "string",
+            "defaultValue": "FUNC",
+            "metadata": {
+                "description": "Tag for the Display Name."
+            }
+        },
+        "tagEnvironmentType": {
+            "type": "string",
+            "defaultValue": "DEV",
+            "metadata": {
+                "description": "Tag for the Environment Type."
+            }
+        },
+        "tagProjectName": {
+            "type": "string",
+            "defaultValue": "Brand Reputation Prototype",
+            "metadata": {
+                "description": "Tag for the Project Name."
+            }
+        },
+        "tagBillingIdentifier": {
+            "type": "string",
+            "defaultValue": "SogetiLab",
+            "metadata": {
+                "description": "Tag for the Billing Identifier."
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-06-01",
+            "type": "Microsoft.Storage/storageAccounts",
+            "kind": "[parameters('storageAccountKind')]",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('tagDisplayName')]",
+                "environmentType": "[parameters('tagEnvironmentType')]",
+                "projectName": "[parameters('tagProjectName')]",
+                "billingIdentifier": "[parameters('tagBillingIdentifier')]"
+            },
+            "sku": {
+                "name": "[parameters('storageAccountReplication')]"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]",
+                "minimumTlsVersion": "[parameters('minimumTlsVersion')]"
+            }
+        }
+    ]
+}

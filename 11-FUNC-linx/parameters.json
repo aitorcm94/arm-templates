@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "funcName": {
+            "value": "sogeti-evhfunc-brandreputation-d"
+        },
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "kind": {
+            "value": "functionapp,linux"
+        },
+        "subscriptionId": {
+            "value": "3f26cf74-4de5-43d8-9c14-945c5594b176"
+        },
+        "hostingPlanResourceGroup": {
+            "value": "sogeti-platform-brandreputation-d"
+        },
+        "hostingPlanName": {
+            "value": "sogeti-appsplinux-brandreputation-d"
+        },
+        "storageAccountName": {
+            "value": "pocacmbf6a"
+        },
+        "tagDisplayName": {
+            "value": "FUNC"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
+        }
+    }
+}

@@ -170,7 +170,7 @@
     },
     "tagDisplayName": {
       "type": "string",
-      "defaultValue": "FUNC",
+      "defaultValue": "ADLS",
       "metadata": {
         "description": "Tag for the Display Name."
       }
