@@ -1,0 +1,240 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workflows_sogeti_lapp_brandreputation_d_name": {
+            "defaultValue": "sogeti-lapp-brandreputation-d",
+            "type": "String"
+        },
+        "sites_sogeti_evhfunc_brandreputation_d_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Web/sites/sogeti-evhfunc-brandreputation-d",
+            "type": "String"
+        },
+        "connections_cognitiveservicestextanalytics_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Web/connections/cognitiveservicestextanalytics",
+            "type": "String"
+        },
+        "connections_eventhubs_1_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Web/connections/eventhubs-1",
+            "type": "String"
+        },
+        "connections_sql_externalid": {
+            "defaultValue": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/resourceGroups/sogeti-platform-brandreputation-d/providers/Microsoft.Web/connections/sql",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[parameters('workflows_sogeti_lapp_brandreputation_d_name')]",
+            "location": "westeurope",
+            "tags": {
+                "BillingIdentifier": "SogetiLab",
+                "displayName": "LAPP",
+                "environmentType": "DEV",
+                "projectName": "Brand Reputation Prototype"
+            },
+            "properties": {
+                "state": "Disabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "When_events_are_available_in_Event_Hub": {
+                            "recurrence": {
+                                "frequency": "Second",
+                                "interval": 10
+                            },
+                            "evaluatedRecurrence": {
+                                "frequency": "Second",
+                                "interval": 10
+                            },
+                            "splitOn": "@triggerBody()",
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['eventhubs']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/@{encodeURIComponent('sogeti-evh-uncompressed-brandreputation-d')}/events/batch/head",
+                                "queries": {
+                                    "consumerGroupName": "twitter-eventhub-output-logicapp",
+                                    "contentType": "application/json",
+                                    "maximumEventsCount": 50
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "For_each": {
+                            "foreach": "@body('Parse_JSON')",
+                            "actions": {
+                                "For_each_2": {
+                                    "foreach": "@body('Sentiment_(V3.0)')['documents']",
+                                    "actions": {
+                                        "Condition": {
+                                            "actions": {
+                                                "HttpTrigger1": {
+                                                    "runAfter": {},
+                                                    "type": "Function",
+                                                    "inputs": {
+                                                        "body": {
+                                                            "tweet_id": "@items('For_each')['id']",
+                                                            "tweet_text": "Please, to resolve your inquiries contact us or send us a DM",
+                                                            "tweet_user": "@{items('For_each')['screen_name']}"
+                                                        },
+                                                        "function": {
+                                                            "id": "[concat(parameters('sites_sogeti_evhfunc_brandreputation_d_externalid'), '/functions/HttpTrigger1')]"
+                                                        },
+                                                        "headers": {
+                                                            "Content-Type": "application/json"
+                                                        },
+                                                        "method": "POST"
+                                                    }
+                                                }
+                                            },
+                                            "runAfter": {},
+                                            "expression": {
+                                                "and": [
+                                                    {
+                                                        "contains": [
+                                                            "@items('For_each_2')['sentiment']",
+                                                            "negative"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "type": "If"
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Sentiment_(V3.0)": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "For_each_3": {
+                                    "foreach": "@body('Sentiment_(V3.0)')['documents']",
+                                    "actions": {
+                                        "Insert_row_(V2)": {
+                                            "runAfter": {},
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "body": {
+                                                    "id": "@{items('For_each')['id']}",
+                                                    "tweet_sentiment": "@items('For_each_3')['sentiment']"
+                                                },
+                                                "host": {
+                                                    "connection": {
+                                                        "name": "@parameters('$connections')['sql']['connectionId']"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('default'))},@{encodeURIComponent(encodeURIComponent('default'))}/tables/@{encodeURIComponent(encodeURIComponent('[dbo].[tweets_sentiments]'))}/items"
+                                            }
+                                        }
+                                    },
+                                    "runAfter": {
+                                        "Sentiment_(V3.0)": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "Foreach"
+                                },
+                                "Sentiment_(V3.0)": {
+                                    "runAfter": {},
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "body": {
+                                            "documents": [
+                                                {
+                                                    "id": "@{items('For_each')['id']}",
+                                                    "text": "@items('For_each')['text']"
+                                                }
+                                            ]
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['cognitiveservicestextanalytics']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/text/analytics/v3.0/sentiment"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Parse_JSON": {
+                            "runAfter": {},
+                            "type": "ParseJson",
+                            "inputs": {
+                                "content": "@triggerBody()?['ContentData']",
+                                "schema": {
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "screen_name": {
+                                                "type": "string"
+                                            },
+                                            "text": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "text",
+                                            "screen_name"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": "array"
+                                }
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "cognitiveservicestextanalytics": {
+                                "connectionId": "[parameters('connections_cognitiveservicestextanalytics_externalid')]",
+                                "connectionName": "cognitiveservicestextanalytics",
+                                "id": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Web/locations/westeurope/managedApis/cognitiveservicestextanalytics"
+                            },
+                            "eventhubs": {
+                                "connectionId": "[parameters('connections_eventhubs_1_externalid')]",
+                                "connectionName": "eventhubs-1",
+                                "id": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Web/locations/westeurope/managedApis/eventhubs"
+                            },
+                            "sql": {
+                                "connectionId": "[parameters('connections_sql_externalid')]",
+                                "connectionName": "sql",
+                                "id": "/subscriptions/3f26cf74-4de5-43d8-9c14-945c5594b176/providers/Microsoft.Web/locations/westeurope/managedApis/sql"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
