@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logicAppName": {
+            "value": "sogeti-lapp-brandreputation-d"
+        },
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "tagDisplayName": {
+            "value": "LAPP"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
+        }
+    }
+}

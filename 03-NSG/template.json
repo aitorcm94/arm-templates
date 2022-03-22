@@ -1,86 +1,86 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "nsgName": {
-        "type": "string",
-        "defaultValue": "sogeti-nsg-tcc-brandreputation-d",
-        "metadata": {
-          "description": "Network security group name."
-        }
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Network security group location."
-        }
-      },
-      "securityRules": {
-        "type": "array",
-        "defaultValue": [
-          {
-            "name": "RDP",
-            "properties": {
-              "priority": 300,
-              "protocol": "TCP",
-              "access": "Allow",
-              "direction": "Inbound",
-              "sourceAddressPrefix": "*",
-              "sourcePortRange": "*",
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389"
-            }
-          }
-        ],
-        "metadata": {
-          "description": "Array containing security rules."
-        }
-      },
-        "tagDisplayName": {
-          "type": "string",
-          "defaultValue": "NSG",
-          "metadata": {
-            "description": "Tag for the Display Name."
-          }
-        },
-        "tagEnvironmentType": {
-          "type": "string",
-          "defaultValue": "DEV",
-          "metadata": {
-            "description": "Tag for the Environment Type."
-          }
-        },
-        "tagProjectName": {
-          "type": "string",
-          "defaultValue": "Brand Reputation Prototype",
-          "metadata": {
-            "description": "Tag for the Project Name."
-          }
-        },
-        "tagBillingIdentifier": {
-          "type": "string",
-          "defaultValue": "SogetiLab",
-          "metadata": {
-            "description": "Tag for the Billing Identifier."
-          }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "nsgName": {
+      "type": "string",
+      "defaultValue": "sogeti-nsg-tcc-brandreputation-d",
+      "metadata": {
+        "description": "Network security group name."
+      }
     },
-    "resources": [
-      {
-        "type": "Microsoft.Network/networkSecurityGroups",
-        "apiVersion": "2020-11-01",
-        "name": "[parameters('nsgName')]",
-        "location": "[parameters('location')]",
-        "tags": {
-            "DisplayName": "[parameters('tagDisplayName')]",
-            "EnvironmentType": "[parameters('tagEnvironmentType')]",
-            "ProjectName": "[parameters('tagProjectName')]",
-            "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
-        },
-        "properties": {
-          "securityRules": "[parameters('securityRules')]"
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Network security group location."
+      }
+    },
+    "securityRules": {
+      "type": "array",
+      "defaultValue": [
+        {
+          "name": "RDP",
+          "properties": {
+            "priority": 300,
+            "protocol": "TCP",
+            "access": "Allow",
+            "direction": "Inbound",
+            "sourceAddressPrefix": "*",
+            "sourcePortRange": "*",
+            "destinationAddressPrefix": "*",
+            "destinationPortRange": "3389"
+          }
+        }
+      ],
+      "metadata": {
+        "description": "Array containing security rules."
+      }
+    },
+      "tagDisplayName": {
+        "type": "string",
+        "defaultValue": "NSG",
+        "metadata": {
+          "description": "Tag for the Display Name."
+        }
+      },
+      "tagEnvironmentType": {
+        "type": "string",
+        "defaultValue": "DEV",
+        "metadata": {
+          "description": "Tag for the Environment Type."
+        }
+      },
+      "tagProjectName": {
+        "type": "string",
+        "defaultValue": "Brand Reputation Prototype",
+        "metadata": {
+          "description": "Tag for the Project Name."
+        }
+      },
+      "tagBillingIdentifier": {
+        "type": "string",
+        "defaultValue": "SogetiLab",
+        "metadata": {
+          "description": "Tag for the Billing Identifier."
         }
       }
-    ]
-  }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('nsgName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+          "DisplayName": "[parameters('tagDisplayName')]",
+          "EnvironmentType": "[parameters('tagEnvironmentType')]",
+          "ProjectName": "[parameters('tagProjectName')]",
+          "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
+      "properties": {
+        "securityRules": "[parameters('securityRules')]"
+      }
+    }
+  ]
+}

@@ -1,88 +1,88 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "virtualNetworksName": {
-            "type": "String",
-            "defaultValue": "sogeti-vnet-brandreputation-d"
-        },
-        "location": {
-            "type": "String",
-            "defaultValue": "[resourceGroup().location]"
-        },
-        "addressSpace": {
-            "type": "String",
-            "defaultValue": "10.0.0.0/16"
-        },
-        "subNetName": {
-            "type": "String",
-            "defaultValue": "default"
-        },
-        "subNetAddressPrefix": {
-            "type": "String",
-            "defaultValue": "10.0.0.0/24"
-        },
-        "tagDisplayName": {
-          "type": "string",
-          "defaultValue": "VNET",
-          "metadata": {
-            "description": "Tag for the Display Name."
-          }
-        },
-        "tagEnvironmentType": {
-          "type": "string",
-          "defaultValue": "DEV",
-          "metadata": {
-            "description": "Tag for the Environment Type."
-          }
-        },
-        "tagProjectName": {
-          "type": "string",
-          "defaultValue": "Brand Reputation Prototype",
-          "metadata": {
-            "description": "Tag for the Project Name."
-          }
-        },
-        "tagBillingIdentifier": {
-          "type": "string",
-          "defaultValue": "SogetiLab",
-          "metadata": {
-            "description": "Tag for the Billing Identifier."
-          }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworksName": {
+      "type": "String",
+      "defaultValue": "sogeti-vnet-brandreputation-d"
     },
-    "resources": [
-        {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2020-11-01",
-            "name": "[parameters('virtualNetworksName')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "DisplayName": "[parameters('tagDisplayName')]",
-                "EnvironmentType": "[parameters('tagEnvironmentType')]",
-                "ProjectName": "[parameters('tagProjectName')]",
-                "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
-            },
+    "location": {
+      "type": "String",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "addressSpace": {
+      "type": "String",
+        "defaultValue": "10.0.0.0/16"
+    },
+    "subNetName": {
+      "type": "String",
+        "defaultValue": "default"
+    },
+    "subNetAddressPrefix": {
+      "type": "String",
+      "defaultValue": "10.0.0.0/24"
+    },
+    "tagDisplayName": {
+      "type": "string",
+      "defaultValue": "VNET",
+      "metadata": {
+        "description": "Tag for the Display Name."
+      }
+    },
+    "tagEnvironmentType": {
+      "type": "string",
+      "defaultValue": "DEV",
+      "metadata": {
+        "description": "Tag for the Environment Type."
+      }
+    },
+    "tagProjectName": {
+      "type": "string",
+      "defaultValue": "Brand Reputation Prototype",
+      "metadata": {
+        "description": "Tag for the Project Name."
+      }
+    },
+    "tagBillingIdentifier": {
+      "type": "string",
+      "defaultValue": "SogetiLab",
+      "metadata": {
+        "description": "Tag for the Billing Identifier."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-11-01",
+      "name": "[parameters('virtualNetworksName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "DisplayName": "[parameters('tagDisplayName')]",
+        "EnvironmentType": "[parameters('tagEnvironmentType')]",
+        "ProjectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[parameters('addressSpace')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('subNetName')]",
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[parameters('addressSpace')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[parameters('subNetName')]",
-                        "properties": {
-                            "addressPrefix": "[parameters('subNetAddressPrefix')]",
-                            "delegations": [],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    }
-                ],
-                "virtualNetworkPeerings": [],
-                "enableDdosProtection": false
+              "addressPrefix": "[parameters('subNetAddressPrefix')]",
+              "delegations": [],
+              "privateEndpointNetworkPolicies": "Enabled",
+              "privateLinkServiceNetworkPolicies": "Enabled"
             }
-        }
-    ]
+          }
+        ],
+        "virtualNetworkPeerings": [],
+        "enableDdosProtection": false
+      }
+    }
+  ]
 }
