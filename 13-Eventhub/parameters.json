@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "eventHubNamespace": {
+            "value": "sogeti-evhn-brandreputation-d"
+        },
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "eventHubSku": {
+            "value": "Standard"
+        },
+        "firstEventHubName": {
+            "value": "sogeti-evh-brandreputation-d"
+        },
+        "secondEventHubName": {
+            "value": "sogeti-evh-uncompressed-brandreputation-d"
+        }
+    }
+}
