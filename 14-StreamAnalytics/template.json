@@ -1,0 +1,228 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.5.0.0",
+    "parameters": {
+        "StreamAnalyticsName": {
+            "type": "String",
+            "defaultValue": "sogeti-asa-brandreputation-d",
+            "metadata": {
+                "description": "Name of the Azure Stream Analytics."
+            }
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location of the Azure Stream Analytics."
+            }
+        },
+        "sku": {
+            "type": "String",
+            "defaultValue": "standard",
+            "metadata": {
+                "description": "The name of the SKU. Required on PUT (CreateOrReplace) requests."
+            }
+        },
+        "jobType": {
+            "type": "String",
+            "defaultValue": "Cloud",
+            "allowedValues": [
+                "Cloud",
+                "Edge"
+            ],
+            "metadata": {
+                "description": "Describes the type of the job. Valid modes are Cloud and 'Edge'."
+            }
+        },
+        "contentStoragePolicy": {
+            "type": "String",
+            "defaultValue": "SystemAccount",
+            "allowedValues": [
+                "SystemAccount",
+                "JobStorageAccount"
+            ],
+            "metadata": {
+                "description": "Valid values are JobStorageAccount and SystemAccount. If set to JobStorageAccount, this requires the user to also specify jobStorageAccount property."
+            }
+        },
+        "compatibilityLevel": {
+            "type": "String",
+            "defaultValue": "1.2",
+            "allowedValues": [
+                "1.0",
+                "1.2"
+            ],
+            "metadata": {
+                "description": "Controls certain runtime behaviors of the streaming job."
+            }
+        },
+        "inputName": {
+            "type": "String",
+            "defaultValue": "TwitterStream",
+            "metadata": {
+                "description": "Name of the Azure Stream Analytics Input."
+            }
+        },
+        "outputNameOne": {
+            "type": "String",
+            "defaultValue": "EvHubOut",
+            "metadata": {
+                "description": "Name of the Azure Stream Analytics Output."
+            }
+        },
+        "outputNameTwo": {
+            "type": "String",
+            "defaultValue": "TwitterADLS2",
+            "metadata": {
+                "description": "Name of the Azure Stream Analytics Output."
+            }
+        },
+        "jobStorageAccount": {
+            "type": "Object",
+            "defaultValue": {
+                "value": {
+                    "accountName": "",
+                    "accountKey": ""
+                }
+            },
+            "metadata": {
+                "description": "The properties that are associated with an Azure Storage account with MSI"
+            }
+        },
+        "transformation": {
+            "type": "Object",
+            "defaultValue": {
+                "name": "Transformation",
+                "properties": {
+                    "streamingUnits": 1,
+                    "query": "SELECT\r\n *\r\nINTO\r\n TwitterADLS2\r\nFROM\r\n TwitterStream\r\nSELECT\r\n id, text, [user].screen_name\r\nINTO\r\n EvHubOut\r\nFROM\r\n TwitterStream"
+                }
+            },
+            "metadata": {
+                "description": "A transformation object, containing all information associated with the named transformation. All transformations are contained under a streaming job."
+            }
+        },
+        "identity": {
+            "type": "Object",
+            "defaultValue": {
+                "type": "SystemAssigned"
+            },
+            "metadata": {
+                "description": "Describes how identity is verified."
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.StreamAnalytics/StreamingJobs",
+            "apiVersion": "2017-04-01-preview",
+            "name": "[parameters('StreamAnalyticsName')]",
+            "location": "[parameters('location')]",
+            "identity": "[parameters('identity')]",
+            "properties": {
+                "sku": {
+                    "name": "[parameters('sku')]"
+                },
+                "outputStartMode": "JobStartTime",
+                "eventsOutOfOrderPolicy": "Adjust",
+                "outputErrorPolicy": "Stop",
+                "eventsOutOfOrderMaxDelayInSeconds": 0,
+                "eventsLateArrivalMaxDelayInSeconds": 5,
+                
+                "jobType": "[parameters('jobType')]",
+                "contentStoragePolicy": "[parameters('contentStoragePolicy')]",
+                "compatibilityLevel": "[parameters('compatibilityLevel')]",
+                "dataLocale": "en-US",
+                "transformation": "[parameters('transformation')]",
+                "jobStorageAccount": "[if(equals(parameters('contentStoragePolicy'), 'SystemAccount'), json('null'), parameters('jobStorageAccount'))]"
+            }
+        },
+        {
+            "type": "Microsoft.StreamAnalytics/streamingjobs/inputs",
+            "apiVersion": "2021-10-01-preview",
+            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('inputName'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
+            ],
+            "properties": {
+                "type": "Stream",
+                "datasource": {
+                    "type": "Microsoft.EventHub/EventHub",
+                    "properties": {
+                        "consumerGroupName": "twitter",
+                        "eventHubName": "sogeti-evh-brandreputation-d",
+                        "serviceBusNamespace": "sogeti-evhn-brandreputation-d",
+                        "authenticationMode": "Msi"
+                    }
+                },
+                "compression": {
+                    "type": "GZip"
+                },
+                "serialization": {
+                    "type": "Json",
+                    "properties": {
+                        "encoding": "UTF8"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+            "apiVersion": "2021-10-01-preview",
+            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('outputNameOne'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
+            ],
+            "properties": {
+                "datasource": {
+                    "type": "Microsoft.EventHub/EventHub",
+                    "properties": {
+                        "propertyColumns": [],
+                        "eventHubName": "sogeti-evh-uncompressed-brandreputation-d",
+                        "serviceBusNamespace": "sogeti-evhn-brandreputation-d",
+                        "authenticationMode": "Msi"
+                    }
+                },
+                "serialization": {
+                    "type": "Json",
+                    "properties": {
+                        "encoding": "UTF8",
+                        "format": "Array"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
+            "apiVersion": "2021-10-01-preview",
+            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('outputNameTwo'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
+            ],
+            "properties": {
+                "datasource": {
+                    "type": "Microsoft.Storage/Blob",
+                    "properties": {
+                        "storageAccounts": [
+                            {
+                                "accountName": "sogetistbrandreputationd"
+                            }
+                        ],
+                        "container": "twitter",
+                        "pathPattern": "raw",
+                        "dateFormat": "yyyy/MM/dd",
+                        "timeFormat": "HH",
+                        "authenticationMode": "Msi"
+                    }
+                },
+                "serialization": {
+                    "type": "Json",
+                    "properties": {
+                        "encoding": "UTF8",
+                        "format": "LineSeparated"
+                    }
+                }
+            }
+        }
+    ]
+}
