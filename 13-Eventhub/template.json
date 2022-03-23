@@ -40,6 +40,34 @@
       "metadata": {
         "description": "Specifies the second Event Hub name."
       }
+    },
+    "tagDisplayName": {
+      "type": "string",
+      "defaultValue": "EVHN",
+      "metadata": {
+        "description": "Tag for the Display Name."
+      }
+    },
+    "tagEnvironmentType": {
+      "type": "string",
+      "defaultValue": "DEV",
+      "metadata": {
+        "description": "Tag for the Environment Type."
+      }
+    },
+    "tagProjectName": {
+      "type": "string",
+      "defaultValue": "Brand Reputation Prototype",
+      "metadata": {
+        "description": "Tag for the Project Name."
+      }
+    },
+    "tagBillingIdentifier": {
+      "type": "string",
+      "defaultValue": "SogetiLab",
+      "metadata": {
+        "description": "Tag for the Billing Identifier."
+      }
     }
   },
   "resources": [
@@ -49,10 +77,10 @@
       "name": "[parameters('eventHubNamespace')]",
       "location": "[parameters('location')]",
       "tags": {
-        "BillingIdentifier": "SogetiLab",
-        "displayName": "EVHN",
-        "environmentType": "DEV",
-        "projectName": "Brand Reputation Prototype"
+        "displayName": "[parameters('tagDisplayName')]",
+        "environmentType": "[parameters('tagEnvironmentType')]",
+        "projectName": "[parameters('tagProjectName')]",
+        "BillingIdentifier": "[parameters('tagBillingIdentifier')]"
       },
       "sku": {
         "name": "[parameters('eventHubSku')]",

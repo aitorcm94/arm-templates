@@ -16,6 +16,18 @@
         },
         "secondEventHubName": {
             "value": "sogeti-evh-uncompressed-brandreputation-d"
+        },
+        "tagDisplayName": {
+            "value": "EVHN"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
         }
     }
 }
