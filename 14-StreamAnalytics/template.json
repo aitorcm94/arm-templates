@@ -77,27 +77,6 @@
                 "description": "Controls certain runtime behaviors of the streaming job."
             }
         },
-        "inputName": {
-            "type": "String",
-            "defaultValue": "TwitterStream",
-            "metadata": {
-                "description": "Name of the Azure Stream Analytics Input."
-            }
-        },
-        "outputNameOne": {
-            "type": "String",
-            "defaultValue": "EvHubOut",
-            "metadata": {
-                "description": "Name of the Azure Stream Analytics Output."
-            }
-        },
-        "outputNameTwo": {
-            "type": "String",
-            "defaultValue": "TwitterADLS2",
-            "metadata": {
-                "description": "Name of the Azure Stream Analytics Output."
-            }
-        },
         "jobStorageAccount": {
             "type": "Object",
             "defaultValue": {
@@ -112,7 +91,7 @@
         },
         "query": {
             "type": "String",
-            "defaultValue": "SELECT *\r\nINTO TwitterADLS2\r\nFROM TwitterStream\r\n\r\nSELECT\r\n    id,\r\n    text,\r\n    [user].screen_name\r\nINTO EvHubOut\r\nFROM TwitterStream",
+            "defaultValue": "SELECT\r\n    *\r\nINTO\r\n    [YourOutputAlias]\r\nFROM\r\n    [YourInputAlias]",
             "metadata": {
                 "description": "Specifies the query that will be run in the streaming job. You can learn more about the Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT (CreateOrReplace) requests."
             }
@@ -124,48 +103,6 @@
             },
             "metadata": {
                 "description": "Describes how identity is verified."
-            }
-        },
-        "serviceBusNamespace": {
-            "type": "String",
-            "defaultValue": "sogeti-evhn-brandreputation-d",
-            "metadata": {
-                "description": "Namespace of the Event Hub."
-            }
-        },
-        "inputEventHubName": {
-            "type": "String",
-            "defaultValue": "sogeti-evh-brandreputation-d",
-            "metadata": {
-                "description": "Event Hub name for input."
-            }
-        },
-       "inputConsumerGroupName": {
-            "type": "String",
-            "defaultValue": "twitter",
-            "metadata": {
-                "description": "Event Hub consumer group for input."
-            }
-        },
-        "outputEventHubName": {
-            "type": "String",
-            "defaultValue": "sogeti-evh-uncompressed-brandreputation-d",
-            "metadata": {
-                "description": "Event Hub name for input."
-            }
-        },
-        "dataLakeStorageAccount": {
-            "type": "String",
-            "defaultValue": "sogetistbrandreputationd",
-            "metadata": {
-                "description": "Data Lake Storage Account for output."
-            }
-        },
-        "containerStorageAccount": {
-            "type": "String",
-            "defaultValue": "twitter",
-            "metadata": {
-                "description": "Container Name of the Storage Account."
             }
         },
         "tagDisplayName": {
@@ -230,93 +167,6 @@
                     }
                 },
                 "jobStorageAccount": "[if(equals(parameters('contentStoragePolicy'), 'SystemAccount'), json('null'), parameters('jobStorageAccount'))]"
-            }
-        },
-        {
-            "type": "Microsoft.StreamAnalytics/streamingjobs/inputs",
-            "apiVersion": "2021-10-01-preview",
-            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('inputName'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
-            ],
-            "properties": {
-                "type": "Stream",
-                "datasource": {
-                    "type": "Microsoft.EventHub/EventHub",
-                    "properties": {
-                        "consumerGroupName": "[parameters('inputConsumerGroupName')]",
-                        "eventHubName": "[parameters('inputEventHubName')]",
-                        "serviceBusNamespace": "[parameters('serviceBusNamespace')]",
-                        "authenticationMode": "Msi"
-                    }
-                },
-                "compression": {
-                    "type": "GZip"
-                },
-                "serialization": {
-                    "type": "Json",
-                    "properties": {
-                        "encoding": "UTF8"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
-            "apiVersion": "2021-10-01-preview",
-            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('outputNameOne'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
-            ],
-            "properties": {
-                "datasource": {
-                    "type": "Microsoft.EventHub/EventHub",
-                    "properties": {
-                        "propertyColumns": [],
-                        "eventHubName": "[parameters('outputEventHubName')]",
-                        "serviceBusNamespace": "[parameters('serviceBusNamespace')]",
-                        "authenticationMode": "Msi"
-                    }
-                },
-                "serialization": {
-                    "type": "Json",
-                    "properties": {
-                        "encoding": "UTF8",
-                        "format": "Array"
-                    }
-                }
-            }
-        },
-        {
-            "type": "Microsoft.StreamAnalytics/streamingjobs/outputs",
-            "apiVersion": "2021-10-01-preview",
-            "name": "[format('{0}/{1}', parameters('StreamAnalyticsName'), parameters('outputNameTwo'))]",
-            "dependsOn": [
-                "[resourceId('Microsoft.StreamAnalytics/streamingjobs', parameters('StreamAnalyticsName'))]"
-            ],
-            "properties": {
-                "datasource": {
-                    "type": "Microsoft.Storage/Blob",
-                    "properties": {
-                        "storageAccounts": [
-                            {
-                                "accountName": "[parameters('dataLakeStorageAccount')]"
-                            }
-                        ],
-                        "container": "[parameters('containerStorageAccount')]",
-                        "pathPattern": "raw",
-                        "dateFormat": "yyyy/MM/dd",
-                        "timeFormat": "HH",
-                        "authenticationMode": "Msi"
-                    }
-                },
-                "serialization": {
-                    "type": "Json",
-                    "properties": {
-                        "encoding": "UTF8",
-                        "format": "LineSeparated"
-                    }
-                }
             }
         }
     ]

@@ -23,15 +23,6 @@
         "compatibilityLevel": {
             "value": "1.2"
         },
-        "inputName": {
-            "value": "TwitterStream"
-        },
-        "outputNameOne": {
-            "value": "EvHubOut"
-        },
-        "outputNameTwo": {
-            "value": "TwitterADLS2"
-        },
         "jobStorageAccount": {
             "value": {
                 "value": {
@@ -40,31 +31,10 @@
                 }
             }
         },
-        "query": {
-            "value": "SELECT\r\n *\r\nINTO\r\n TwitterADLS2\r\nFROM\r\n TwitterStream\r\nSELECT\r\n id, text, [user].screen_name\r\nINTO\r\n EvHubOut\r\nFROM\r\n TwitterStream"
-        },
         "identity": {
             "value": {
                 "type": "SystemAssigned"
             }
-        },
-        "serviceBusNamespace": {
-            "value": "sogeti-evhn-brandreputation-d"
-        },
-        "inputEventHubName": {
-            "value": "sogeti-evh-brandreputation-d"
-        },
-        "inputConsumerGroupName": {
-            "value": "twitter"
-        },
-        "outputEventHubName": {
-            "value": "sogeti-evh-uncompressed-brandreputation-d"
-        },
-        "dataLakeStorageAccount": {
-            "value": "sogetistbrandreputationd"
-        },
-        "containerStorageAccount": {
-            "value": "twitter"
         },
         "tagDisplayName": {
             "value": "ASA"
