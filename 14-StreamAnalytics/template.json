@@ -6,7 +6,7 @@
             "type": "String",
             "defaultValue": "sogeti-asa-brandreputation-d",
             "metadata": {
-                "description": "Name of the Azure Stream Analytics."
+                "description": "Stream Analytics Job Name, can contain alphanumeric characters and hypen and must be 3-63 characters long."
             }
         },
         "location": {
@@ -21,6 +21,27 @@
             "defaultValue": "standard",
             "metadata": {
                 "description": "The name of the SKU. Required on PUT (CreateOrReplace) requests."
+            }
+        },
+        "numberOfStreamingUnits": {
+            "type": "int",
+            "defaultValue": 1,
+            "minValue": 1,
+            "maxValue": 48,
+            "allowedValues": [
+                1,
+                3,
+                6,
+                12,
+                18,
+                24,
+                30,
+                36,
+                42,
+                48
+            ],
+            "metadata": {
+                "description": "Number of Streaming Units"
             }
         },
         "jobType": {
@@ -89,17 +110,11 @@
                 "description": "The properties that are associated with an Azure Storage account with MSI"
             }
         },
-        "transformation": {
-            "type": "Object",
-            "defaultValue": {
-                "name": "Transformation",
-                "properties": {
-                    "streamingUnits": 1,
-                    "query": "SELECT\r\n *\r\nINTO\r\n TwitterADLS2\r\nFROM\r\n TwitterStream\r\nSELECT\r\n id, text, [user].screen_name\r\nINTO\r\n EvHubOut\r\nFROM\r\n TwitterStream"
-                }
-            },
+        "query": {
+            "type": "String",
+            "defaultValue": "SELECT *\r\nINTO TwitterADLS2\r\nFROM TwitterStream\r\n\r\nSELECT\r\n    id,\r\n    text,\r\n    [user].screen_name\r\nINTO EvHubOut\r\nFROM TwitterStream",
             "metadata": {
-                "description": "A transformation object, containing all information associated with the named transformation. All transformations are contained under a streaming job."
+                "description": "Specifies the query that will be run in the streaming job. You can learn more about the Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT (CreateOrReplace) requests."
             }
         },
         "identity": {
@@ -110,6 +125,76 @@
             "metadata": {
                 "description": "Describes how identity is verified."
             }
+        },
+        "serviceBusNamespace": {
+            "type": "String",
+            "defaultValue": "sogeti-evhn-brandreputation-d",
+            "metadata": {
+                "description": "Namespace of the Event Hub."
+            }
+        },
+        "inputEventHubName": {
+            "type": "String",
+            "defaultValue": "sogeti-evh-brandreputation-d",
+            "metadata": {
+                "description": "Event Hub name for input."
+            }
+        },
+       "inputConsumerGroupName": {
+            "type": "String",
+            "defaultValue": "twitter",
+            "metadata": {
+                "description": "Event Hub consumer group for input."
+            }
+        },
+        "outputEventHubName": {
+            "type": "String",
+            "defaultValue": "sogeti-evh-uncompressed-brandreputation-d",
+            "metadata": {
+                "description": "Event Hub name for input."
+            }
+        },
+        "dataLakeStorageAccount": {
+            "type": "String",
+            "defaultValue": "sogetistbrandreputationd",
+            "metadata": {
+                "description": "Data Lake Storage Account for output."
+            }
+        },
+        "containerStorageAccount": {
+            "type": "String",
+            "defaultValue": "twitter",
+            "metadata": {
+                "description": "Container Name of the Storage Account."
+            }
+        },
+        "tagDisplayName": {
+            "type": "string",
+            "defaultValue": "ASA",
+            "metadata": {
+                "description": "Tag for the Display Name."
+            }
+        },
+        "tagEnvironmentType": {
+            "type": "string",
+            "defaultValue": "DEV",
+            "metadata": {
+                "description": "Tag for the Environment Type."
+            }
+        },
+        "tagProjectName": {
+            "type": "string",
+            "defaultValue": "Brand Reputation Prototype",
+            "metadata": {
+                "description": "Tag for the Project Name."
+            }
+        },
+        "tagBillingIdentifier": {
+            "type": "string",
+            "defaultValue": "SogetiLab",
+            "metadata": {
+                "description": "Tag for the Billing Identifier."
+            }
         }
     },
     "resources": [
@@ -119,21 +204,31 @@
             "name": "[parameters('StreamAnalyticsName')]",
             "location": "[parameters('location')]",
             "identity": "[parameters('identity')]",
+            "tags": {
+                "displayName": "[parameters('tagDisplayName')]",
+                "environmentType": "[parameters('tagEnvironmentType')]",
+                "projectName": "[parameters('tagProjectName')]",
+                "billingIdentifier": "[parameters('tagBillingIdentifier')]"
+            },
             "properties": {
                 "sku": {
                     "name": "[parameters('sku')]"
                 },
-                "outputStartMode": "JobStartTime",
                 "eventsOutOfOrderPolicy": "Adjust",
                 "outputErrorPolicy": "Stop",
                 "eventsOutOfOrderMaxDelayInSeconds": 0,
                 "eventsLateArrivalMaxDelayInSeconds": 5,
-                
                 "jobType": "[parameters('jobType')]",
                 "contentStoragePolicy": "[parameters('contentStoragePolicy')]",
                 "compatibilityLevel": "[parameters('compatibilityLevel')]",
                 "dataLocale": "en-US",
-                "transformation": "[parameters('transformation')]",
+                "transformation": {
+                    "name": "Transformation",
+                    "properties": {
+                        "streamingUnits": "[parameters('numberOfStreamingUnits')]",
+                        "query": "[parameters('query')]"
+                    }
+                },
                 "jobStorageAccount": "[if(equals(parameters('contentStoragePolicy'), 'SystemAccount'), json('null'), parameters('jobStorageAccount'))]"
             }
         },
@@ -149,9 +244,9 @@
                 "datasource": {
                     "type": "Microsoft.EventHub/EventHub",
                     "properties": {
-                        "consumerGroupName": "twitter",
-                        "eventHubName": "sogeti-evh-brandreputation-d",
-                        "serviceBusNamespace": "sogeti-evhn-brandreputation-d",
+                        "consumerGroupName": "[parameters('inputConsumerGroupName')]",
+                        "eventHubName": "[parameters('inputEventHubName')]",
+                        "serviceBusNamespace": "[parameters('serviceBusNamespace')]",
                         "authenticationMode": "Msi"
                     }
                 },
@@ -178,8 +273,8 @@
                     "type": "Microsoft.EventHub/EventHub",
                     "properties": {
                         "propertyColumns": [],
-                        "eventHubName": "sogeti-evh-uncompressed-brandreputation-d",
-                        "serviceBusNamespace": "sogeti-evhn-brandreputation-d",
+                        "eventHubName": "[parameters('outputEventHubName')]",
+                        "serviceBusNamespace": "[parameters('serviceBusNamespace')]",
                         "authenticationMode": "Msi"
                     }
                 },
@@ -205,10 +300,10 @@
                     "properties": {
                         "storageAccounts": [
                             {
-                                "accountName": "sogetistbrandreputationd"
+                                "accountName": "[parameters('dataLakeStorageAccount')]"
                             }
                         ],
-                        "container": "twitter",
+                        "container": "[parameters('containerStorageAccount')]",
                         "pathPattern": "raw",
                         "dateFormat": "yyyy/MM/dd",
                         "timeFormat": "HH",

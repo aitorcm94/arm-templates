@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "StreamAnalyticsName": {
+            "value": "sogeti-asa-brandreputation-d"
+        },
+        "location": {
+            "value": "[resourceGroup().location]"
+        },
+        "sku": {
+            "value": "standard"
+        },
+        "numberOfStreamingUnits": {
+            "value": 1
+        },
+        "jobType": {
+            "value": "Cloud"
+        },
+        "contentStoragePolicy": {
+            "value": "SystemAccount"
+        },
+        "compatibilityLevel": {
+            "value": "1.2"
+        },
+        "inputName": {
+            "value": "TwitterStream"
+        },
+        "outputNameOne": {
+            "value": "EvHubOut"
+        },
+        "outputNameTwo": {
+            "value": "TwitterADLS2"
+        },
+        "jobStorageAccount": {
+            "value": {
+                "value": {
+                    "accountName": "",
+                    "accountKey": ""
+                }
+            }
+        },
+        "query": {
+            "value": "SELECT\r\n *\r\nINTO\r\n TwitterADLS2\r\nFROM\r\n TwitterStream\r\nSELECT\r\n id, text, [user].screen_name\r\nINTO\r\n EvHubOut\r\nFROM\r\n TwitterStream"
+        },
+        "identity": {
+            "value": {
+                "type": "SystemAssigned"
+            }
+        },
+        "serviceBusNamespace": {
+            "value": "sogeti-evhn-brandreputation-d"
+        },
+        "inputEventHubName": {
+            "value": "sogeti-evh-brandreputation-d"
+        },
+        "inputConsumerGroupName": {
+            "value": "twitter"
+        },
+        "outputEventHubName": {
+            "value": "sogeti-evh-uncompressed-brandreputation-d"
+        },
+        "dataLakeStorageAccount": {
+            "value": "sogetistbrandreputationd"
+        },
+        "containerStorageAccount": {
+            "value": "twitter"
+        },
+        "tagDisplayName": {
+            "value": "ASA"
+        },
+        "tagEnvironmentType": {
+            "value": "DEV"
+        },
+        "tagProjectName": {
+            "value": "Brand Reputation Prototype"
+        },
+        "tagBillingIdentifier": {
+            "value": "SogetiLab"
+        }
+    }
+}
